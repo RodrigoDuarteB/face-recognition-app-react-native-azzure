@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, SafeAreaView, StatusBar, View } from 'react-native'
 import { colors } from '../global.styles'
 import Center from './Center'
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const Header = () => {
     return (
@@ -13,7 +14,7 @@ const Header = () => {
 
             {/* user logo */}
             <Center>
-                <Text>User</Text>
+                <FontAwesome5 name="user-cog" size={30} color={colors.secondaryLight}/>
             </Center>
 
         </SafeAreaView>

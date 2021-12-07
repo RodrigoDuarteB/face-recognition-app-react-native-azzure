@@ -6,6 +6,7 @@ import Events from '../screens/Events'
 import Photos from '../screens/Photos'
 import Purchases from '../screens/Purchases'
 import Header from './Header'
+import { MaterialIcons } from '@expo/vector-icons'
 
 const Tab = createBottomTabNavigator()
 
@@ -22,9 +23,21 @@ const Tabs = () => {
                 }
             }}
         >
-            <Tab.Screen name="events" component={Events}/>
-            <Tab.Screen name="photos" component={Photos}/>
-            <Tab.Screen name="purchases" component={Purchases}/>
+            <Tab.Screen name="events" component={Events}
+                options={{
+                    tabBarIcon: ({focused}) => <MaterialIcons name="event" size={30}/>
+                }}
+            />
+            <Tab.Screen name="photos" component={Photos}
+                options={{
+                    tabBarIcon: ({focused}) => <MaterialIcons name="photo" size={30}/>
+                }}
+            />
+            <Tab.Screen name="purchases" component={Purchases}
+                options={{
+                    tabBarIcon: ({focused}) => <MaterialIcons name="shopping-cart" size={30}/>
+                }}
+            />
         </Tab.Navigator>
     )
 }
