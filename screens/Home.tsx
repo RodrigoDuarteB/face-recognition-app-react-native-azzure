@@ -10,18 +10,20 @@ import { MaterialIcons } from '@expo/vector-icons'
 import Notifications from './Notifications'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import CreateEvent from '../components/events/CreateEvent'
+import Event from '../components/events/Event'
 
 const Tab = createBottomTabNavigator()
 const EventsStack = createNativeStackNavigator()
 
 const Home = () => {
 
-    const EventsStackScreen = () => (
+    /* const EventsStackScreen = () => (
         <EventsStack.Navigator screenOptions={{headerShown: false}}>
-            <EventsStack.Screen name="Events" component={Events}/>
+            <EventsStack.Screen name="EventsHome" component={Events}/>
             <EventsStack.Screen name="CreateEvent" component={CreateEvent}/>
+            <EventsStack.Screen name="Event" component={Event}/>
         </EventsStack.Navigator>
-    )
+    ) */
 
     return (
         <Tab.Navigator 
@@ -36,7 +38,7 @@ const Home = () => {
                 }
             })}
         >
-            <Tab.Screen name="Events" component={EventsStackScreen}
+            <Tab.Screen name="Events" component={Events}
                 options={{
                     tabBarIcon: ({focused}) => <MaterialIcons name="event" size={30} color={focused ? 'white' : 'black'}/>,
                     tabBarLabel: ({focused}) => <Text style={{...styles.label, color: focused ? 'white': 'black'}}>Eventos</Text>,

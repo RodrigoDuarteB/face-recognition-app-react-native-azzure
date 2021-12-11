@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import Center from '../components/Center'
 import Content from '../components/Content'
 import Logo from '../components/Logo'
@@ -9,6 +9,7 @@ import Loading from '../components/Loading'
 import ModalLoading from '../components/ModalLoading'
 import { useForm } from 'react-hook-form'
 import InputLabel from '../components/InputLabel'
+import Button from '../components/Button'
 
 const Login = ({ navigation }: any) => {
     const [ready, setReady] = useState(false)
@@ -67,21 +68,22 @@ const Login = ({ navigation }: any) => {
                     password
                 />
 
-                <TouchableOpacity
+                <Button 
+                    title="Login"
                     onPress={handleSubmit(login)}
-                    style={styles.button}
-                >
-                    <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
+                    textColor="white"
+                    styles={{marginTop: 50, marginBottom: 20}}
+                />
 
                 <Text style={styles.question}>¿No estás registrado?</Text>
 
-                <TouchableOpacity
+                <Button 
+                    title="Registrarse"
                     onPress={register}
-                    style={{...styles.button, backgroundColor: colors.primaryDark, marginTop: 25}}
-                >
-                    <Text style={{...styles.buttonText, color: 'black'}}>Registrarse</Text>
-                </TouchableOpacity>
+                    textColor="black"
+                    color={colors.primaryDark}
+                    styles={{marginTop: 20}}
+                />
             </Center>
         </Content>
     ) : <Loading />
@@ -93,20 +95,6 @@ const styles = StyleSheet.create({
     question: {
         color: 'white',
         fontWeight: 'bold',
-        marginTop: 50
-    },
-    button: {
-        backgroundColor: colors.primary,
-        padding: 15,
-        borderRadius: 20,
-        alignItems: 'center',
-        width: 150,
-        marginTop: 50
-    },
-    buttonText: {
-        color: 'white',
-        fontWeight: '700',
-        fontSize: 16
     },
     logo: {
         alignItems: 'center',

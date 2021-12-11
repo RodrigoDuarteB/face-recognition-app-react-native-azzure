@@ -11,6 +11,7 @@ import { useForm, Controller } from 'react-hook-form'
 import InputLabel from '../components/InputLabel'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useFocusEffect } from '@react-navigation/native'
+import Button from '../components/Button'
 
 
 const Register = ({ navigation }: any) => {
@@ -152,12 +153,13 @@ const Register = ({ navigation }: any) => {
                         />
                     </ConditionalRender>
 
-                    <TouchableOpacity
+                    <Button 
+                        title="Registrarse"
                         onPress={handleSubmit(save)}
-                        style={{...styles.button, backgroundColor: colors.primaryDark, marginBottom: 25}}
-                    >
-                        <Text style={{...styles.buttonText, color: 'black'}}>Registrarse</Text>
-                    </TouchableOpacity>
+                        textColor="black"
+                        color={colors.primaryDark}
+                        styles={{marginBottom: 30, marginTop: 20}}
+                    />
                 </Center>
             </ScrollView>
         </Content>
@@ -171,18 +173,6 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         marginLeft: 5
-    },
-    button: {
-        backgroundColor: colors.primary,
-        padding: 15,
-        borderRadius: 20,
-        alignItems: 'center',
-        width: 150
-    },
-    buttonText: {
-        color: 'white',
-        fontWeight: '700',
-        fontSize: 16
     },
     logo: {
         alignItems: 'center',

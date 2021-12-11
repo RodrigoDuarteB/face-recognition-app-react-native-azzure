@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
 import Center from '../components/Center'
 import Content from '../components/Content'
-import Event from '../components/events/Event'
+import EventBadge from '../components/events/EventBadge'
 import FutureRender from '../components/FutureRender'
 import Loading from '../components/Loading'
 import { colors, container } from '../global.styles'
@@ -26,6 +26,14 @@ const Events = ({ navigation }: any) => {
 
     const switchFilter = () => {
         setFilter({name: 'Fecha', ref: 'date'})
+    }
+
+    const event = {
+        title: 'Egreso 2020',
+        date: '15/12/2021',
+        photos: 53,
+        appears: 6,
+        description: 'Fiesta de Egresados 2020'
     }
 
     return (
@@ -85,12 +93,7 @@ const Events = ({ navigation }: any) => {
 
             {/* events cards */}
             <ScrollView>
-                <Event data={{
-                    title: 'Egreso 2020',
-                    date: '15/12/2021',
-                    photos: 53,
-                    appears: 6
-                }}/>
+                <EventBadge data={event} />
             </ScrollView>
         </Content>
     )

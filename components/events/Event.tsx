@@ -1,40 +1,70 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { colors } from '../../global.styles'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { colors, container } from '../../global.styles'
+import Button from '../Button'
 import Center from '../Center'
+import Content from '../Content'
 
-interface Props {
-    data: any
-}
-
-const Event = ({ data }: Props) => {
-
-    const { title, date, photos, appears } = data
-
+const Event = ({ route, navigation }: any) => {
+    const { title, date, photos, appears, description } = route.params
+    
     return (
-        <TouchableOpacity style={styles.eventCard}>
+        <Content styles={container}>
             <Center>
-                <Text>{title}</Text>
-                <View style={styles.flex}>
-                    <Text>Fecha: {date}</Text>
-                    <Text>Fotos: {photos}</Text>
-                </View>
-                <Text>Fotos en las que apareces: {appears}</Text>
+                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.description}>{description}</Text>
+                <Text style={[styles.title, {fontSize: 18}]}>
+                    Fotos en las que Apareces: {appears}
+                </Text>
+                
+                <ScrollView contentContainerStyle={styles.imagesContainer} 
+                style={{marginVertical: 15}}>  
+                    <View style={styles.imageContainer}></View>
+                    <View style={styles.imageContainer}></View>
+                    <View style={styles.imageContainer}></View>
+                    <View style={styles.imageContainer}></View>
+                    <View style={styles.imageContainer}></View>
+                    <View style={styles.imageContainer}></View>
+                    <View style={styles.imageContainer}></View>
+                    <View style={styles.imageContainer}></View>
+                    <View style={styles.imageContainer}></View>
+                    <View style={styles.imageContainer}></View>
+                    <View style={styles.imageContainer}></View>
+                    <View style={styles.imageContainer}></View>
+                    <View style={styles.imageContainer}></View>
+                </ScrollView>
+
+                <Button 
+                    title="Comprar Todas"
+                    onPress={() => null}
+                    textColor="white"
+                />
             </Center>
-        </TouchableOpacity>
+        </Content>
     )
 }
 
 export default Event
 
 const styles = StyleSheet.create({
-    eventCard: {
+    title: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 25
+    },
+    description: {  
+        color: colors.secondaryLight,
+        fontSize: 20
+    }, 
+    imagesContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center'
+    },
+    imageContainer: {
         backgroundColor: colors.secondaryLight,
         height: 100,
-        borderRadius: 20
-    },
-    flex: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
+        width: 100,
+        margin: 10
+    }
 })

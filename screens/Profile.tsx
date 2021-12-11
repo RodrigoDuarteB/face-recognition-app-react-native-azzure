@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet } from 'react-native'
+import Button from '../components/Button'
 import Center from '../components/Center'
 import Content from '../components/Content'
 import ModalLoading from '../components/ModalLoading'
 import { auth } from '../firebase.config'
-import { colors } from '../global.styles'
 
 const Profile = ({ navigation }: any) => {
     const [loading, setLoading] = useState(false)
@@ -29,12 +29,10 @@ const Profile = ({ navigation }: any) => {
         <Content>
             <ModalLoading visible={loading}/>
             <Center>
-                <TouchableOpacity
-                        onPress={logout}
-                        style={styles.button}
-                    >
-                        <Text style={styles.buttonText}>Cerrar Sesión</Text>
-                </TouchableOpacity>
+                <Button 
+                    onPress={logout}
+                    title="Cerrar Sesion"
+                />
             </Center>
         </Content>
     )
@@ -42,17 +40,4 @@ const Profile = ({ navigation }: any) => {
 
 export default Profile
 
-const styles = StyleSheet.create({
-    button: {
-        backgroundColor: colors.primary,
-        padding: 15,
-        borderRadius: 20,
-        alignItems: 'center',
-        width: 150
-    },
-    buttonText: {
-        color: 'white',
-        fontWeight: '700',
-        fontSize: 16
-    },
-})
+const styles = StyleSheet.create({})
