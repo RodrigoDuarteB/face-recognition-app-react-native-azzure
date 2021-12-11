@@ -7,6 +7,7 @@ import FutureRender from '../components/FutureRender'
 import Loading from '../components/Loading'
 import { colors, container } from '../global.styles'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
+import PopUpMessage from '../components/PopUpMessage'
 
 const Events = ({ navigation }: any) => {
     const [data, setData] = useState<any>()
@@ -37,7 +38,7 @@ const Events = ({ navigation }: any) => {
     }
 
     return (
-        <Content styles={container}>
+        <Content styles={container} cart auth>
             {/* <FutureRender
                 loading={<Loading />}
                 promise={fetch('https://jsonplaceholder.typicode.com/posts')}

@@ -1,10 +1,10 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import Content from '../Content'
 
 const CreateEvent = ({ navigation }: any) => {
     return (
-        <Content>
+        <Content auth>
             <Text>Create Event</Text>
         </Content>
     )

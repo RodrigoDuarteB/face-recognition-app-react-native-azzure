@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View, Switch, Image } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import Center from '../components/Center'
@@ -10,11 +10,12 @@ import { colors, container } from '../global.styles'
 import { useForm, Controller } from 'react-hook-form'
 import InputLabel from '../components/InputLabel'
 import { MaterialIcons } from '@expo/vector-icons'
-import { useFocusEffect } from '@react-navigation/native'
 import Button from '../components/Button'
+import ModalMediaSelector from '../components/ModalMediaSelector'
 
 
 const Register = ({ navigation }: any) => {
+    const [selectMedia, setSelectMedia] = useState(false)
     const [photos, setPhotos] = useState([])
     const [saving, setSaving] = useState(false)
     const { control, handleSubmit, formState: { dirtyFields }, getValues } = useForm({
@@ -25,36 +26,23 @@ const Register = ({ navigation }: any) => {
         }
     })
 
-    /* useFocusEffect(
-        useCallback(() => {
-            console.log('came back')
-            setPhotos(getValues('photos'))
-            return () => {
-                setPhotos(getValues('photos'))
-            }
-        }, [])
-    ) */
-    
-
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('state', () => {
-            setPhotos(getValues('photos'))
-        });
-        return unsubscribe
-        
-    }, [navigation])
-
-    useEffect(() => {
-        setPhotos(getValues('photos'))
-    }, [photos])
-
     const save = (data: any) => {
         alert(JSON.stringify(data))
     }
 
     return (
         <Content>
+            <ModalMediaSelector 
+                control={control} 
+                visible={selectMedia}
+                onCancel={() => setSelectMedia(false)}
+                onAccept={() => {
+                    setSelectMedia(false)
+                    setPhotos(getValues('photos'))
+                }}
+            />
             <ModalLoading visible={saving}/>
+            
             {/* logo */}
             <View style={styles.logo}>
                 <Logo />
@@ -88,9 +76,7 @@ const Register = ({ navigation }: any) => {
                         <Text style={styles.label}>Fotos</Text>
                         <TouchableOpacity
                             style={styles.buttonImage}
-                            onPress={() => navigation.navigate('Media', {
-                                control
-                            })}
+                            onPress={() => setSelectMedia(true)}
                         >
                             <Center>
                                 <MaterialIcons name='add' size={30} color={colors.secondaryLight}/>
@@ -105,7 +91,7 @@ const Register = ({ navigation }: any) => {
                         <ScrollView horizontal>
                             {
                                 photos.map((photo, index) => 
-                                    <Text style={styles.photoText}>{photo}</Text>
+                                    <Image key={index} source={{uri: photo}} width={100} height={100}/>
                                 )
                             }   
                         </ScrollView>

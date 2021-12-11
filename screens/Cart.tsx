@@ -2,14 +2,14 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import Content from '../components/Content'
 
-const Notifications = () => {
+const Cart = () => {
     return (
-        <Content cart auth>
-            <Text>Notifications</Text>
+        <Content auth>
+            
         </Content>
     )
 }
 
-export default Notifications
+export default Cart
 
 const styles = StyleSheet.create({})

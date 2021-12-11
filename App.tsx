@@ -5,9 +5,9 @@ import Login from './screens/Login';
 import Home from './screens/Home';
 import Profile from './screens/Profile';
 import Register from './screens/Register';
-import MediaSelector from './components/MediaSelector';
 import CreateEvent from './components/events/CreateEvent';
 import Event from './components/events/Event';
+import Cart from './screens/Cart';
 
 const Stack = createNativeStackNavigator()
 
@@ -19,9 +19,9 @@ const App = () => {
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Home" component={Home}/>
         <Stack.Screen name="Profile" component={Profile}/>
-        <Stack.Screen name="Media" component={MediaSelector} />
         <Stack.Screen name="CreateEvent" component={CreateEvent}/>
         <Stack.Screen name="Event" component={Event}/>
+        <Stack.Screen name="Cart" component={Cart}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

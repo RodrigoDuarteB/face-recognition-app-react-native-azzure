@@ -4,7 +4,7 @@ import Content from '../components/Content'
 
 const Photos = () => {
     return (
-        <Content>
+        <Content cart auth>
             <Text>My Photos</Text>
         </Content>
     )

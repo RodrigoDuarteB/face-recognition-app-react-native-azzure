@@ -1,15 +1,23 @@
-import React from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { colors, container } from '../../global.styles'
 import Button from '../Button'
 import Center from '../Center'
 import Content from '../Content'
+import ModalContent from '../ModalContent'
+import ModalImageEvent from './ModalImageEvent'
 
 const Event = ({ route, navigation }: any) => {
     const { title, date, photos, appears, description } = route.params
-    
+    const [viewing, setViewing] = useState(false)
+
     return (
-        <Content styles={container}>
+        <Content styles={container} cart auth>
+            <ModalImageEvent 
+                visible={viewing}	
+                onRequestClose={() => setViewing(false)}
+                data={route.params}
+            />
             <Center>
                 <Text style={styles.title}>{title}</Text>
                 <Text style={styles.description}>{description}</Text>
@@ -19,19 +27,21 @@ const Event = ({ route, navigation }: any) => {
                 
                 <ScrollView contentContainerStyle={styles.imagesContainer} 
                 style={{marginVertical: 15}}>  
-                    <View style={styles.imageContainer}></View>
-                    <View style={styles.imageContainer}></View>
-                    <View style={styles.imageContainer}></View>
-                    <View style={styles.imageContainer}></View>
-                    <View style={styles.imageContainer}></View>
-                    <View style={styles.imageContainer}></View>
-                    <View style={styles.imageContainer}></View>
-                    <View style={styles.imageContainer}></View>
-                    <View style={styles.imageContainer}></View>
-                    <View style={styles.imageContainer}></View>
-                    <View style={styles.imageContainer}></View>
-                    <View style={styles.imageContainer}></View>
-                    <View style={styles.imageContainer}></View>
+                    <TouchableOpacity style={styles.imageContainer}
+                        onPress={() => setViewing(true)}
+                    ></TouchableOpacity>
+                    <TouchableOpacity style={styles.imageContainer}></TouchableOpacity>
+                    <TouchableOpacity style={styles.imageContainer}></TouchableOpacity>
+                    <TouchableOpacity style={styles.imageContainer}></TouchableOpacity>
+                    <TouchableOpacity style={styles.imageContainer}></TouchableOpacity>
+                    <TouchableOpacity style={styles.imageContainer}></TouchableOpacity>
+                    <TouchableOpacity style={styles.imageContainer}></TouchableOpacity>
+                    <TouchableOpacity style={styles.imageContainer}></TouchableOpacity>
+                    <TouchableOpacity style={styles.imageContainer}></TouchableOpacity>
+                    <TouchableOpacity style={styles.imageContainer}></TouchableOpacity>
+                    <TouchableOpacity style={styles.imageContainer}></TouchableOpacity>
+                    <TouchableOpacity style={styles.imageContainer}></TouchableOpacity>
+                    <TouchableOpacity style={styles.imageContainer}></TouchableOpacity>
                 </ScrollView>
 
                 <Button 
@@ -63,8 +73,8 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         backgroundColor: colors.secondaryLight,
-        height: 100,
-        width: 100,
-        margin: 10
+        height: 120,
+        width: 120,
+        margin: 7
     }
 })

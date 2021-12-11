@@ -26,7 +26,7 @@ const Profile = ({ navigation }: any) => {
     }
 
     return (
-        <Content>
+        <Content auth>
             <ModalLoading visible={loading}/>
             <Center>
                 <Button 

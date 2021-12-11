@@ -52,7 +52,7 @@ const Home = () => {
             />
             <Tab.Screen name="Purchases" component={Purchases}
                 options={{
-                    tabBarIcon: ({focused}) => <MaterialIcons name="shopping-cart" size={30} color={focused ? 'white' : 'black'}/>,
+                    tabBarIcon: ({focused}) => <MaterialIcons name="shop" size={30} color={focused ? 'white' : 'black'}/>,
                     tabBarLabel: ({focused}) => <Text style={{...styles.label, color: focused ? 'white': 'black'}}>Mis Compras</Text>
                 }}
             />
