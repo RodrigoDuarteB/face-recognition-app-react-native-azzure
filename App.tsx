@@ -1,21 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Login from './screens/Login';
 import Home from './screens/Home';
-import Tabs from './components/Tabs';
+import Profile from './screens/Profile';
+import Register from './screens/Register';
+import MediaSelector from './components/MediaSelector';
 
 const Stack = createNativeStackNavigator()
 
-export default function App() {
+const App = () => {
   return (
     <NavigationContainer>
-      {/* <Stack.Navigator>
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Home" component={Home}/>
-      </Stack.Navigator> */}
-      <Tabs />
+        <Stack.Screen name="Profile" component={Profile}/>
+        <Stack.Screen name="Media" component={MediaSelector} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+export default App

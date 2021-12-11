@@ -1,9 +1,13 @@
 import React from 'react'
 import { View } from 'react-native'
 
-const Center = ({ children }: any) => {
+const Center = ({ children, horizontal, vertical, styles }: any) => {
+
     return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={
+            horizontal && !vertical ? { alignItems: 'center', ...styles } : 
+            !horizontal && vertical ? { flex: 1, justifyContent: 'center', ...styles } : { flex: 1, justifyContent: 'center', alignItems: 'center', ...styles }
+        }>
             {children}
         </View>
     )

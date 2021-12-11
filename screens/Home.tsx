@@ -1,49 +1,75 @@
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import { auth } from '../firebase.config'
+import { StyleSheet, Text } from 'react-native'
+import { colors } from '../global.styles'
+import Events from './Events'
+import Photos from './Photos'
+import Purchases from './Purchases'
+import Header from '../components/Header'
+import { MaterialIcons } from '@expo/vector-icons'
+import Notifications from './Notifications'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import CreateEvent from '../components/events/CreateEvent'
 
-const Home = ({ navigation }: any) => {
+const Tab = createBottomTabNavigator()
+const EventsStack = createNativeStackNavigator()
 
-    const signOut = () => {
-        auth.signOut(auth.getAuth()) 
-        .then(() => {
-            navigation.navigate('Login')
-        })
-        .catch(error => alert(error.message))
-    }
+const Home = () => {
+
+    const EventsStackScreen = () => (
+        <EventsStack.Navigator screenOptions={{headerShown: false}}>
+            <EventsStack.Screen name="Events" component={Events}/>
+            <EventsStack.Screen name="CreateEvent" component={CreateEvent}/>
+        </EventsStack.Navigator>
+    )
 
     return (
-        <View style={styles.container}>
-            <Text>Home: {auth.getAuth().currentUser?.email}</Text>
-            <TouchableOpacity style={styles.button}
-                onPress={signOut}
-            >
-                <Text style={styles.buttonText}>Sign Out</Text>
-            </TouchableOpacity>
-        </View>
+        <Tab.Navigator 
+            initialRouteName="Events"
+            screenOptions={({ route, navigation }) => ({
+                header: () => <Header navigation={navigation}/>,
+                tabBarStyle: {
+                    backgroundColor: colors.primary,
+                    height: 60, 
+                    borderTopWidth: 0,
+                    paddingTop: 7
+                }
+            })}
+        >
+            <Tab.Screen name="Events" component={EventsStackScreen}
+                options={{
+                    tabBarIcon: ({focused}) => <MaterialIcons name="event" size={30} color={focused ? 'white' : 'black'}/>,
+                    tabBarLabel: ({focused}) => <Text style={{...styles.label, color: focused ? 'white': 'black'}}>Eventos</Text>,
+                }}
+            />
+            <Tab.Screen name="Photos" component={Photos}
+                options={{
+                    tabBarIcon: ({focused}) => <MaterialIcons name="photo" size={30} color={focused ? 'white' : 'black'}/>,
+                    tabBarLabel: ({focused}) => <Text style={{...styles.label, color: focused ? 'white': 'black'}}>Mis Fotos</Text>
+                }}
+            />
+            <Tab.Screen name="Purchases" component={Purchases}
+                options={{
+                    tabBarIcon: ({focused}) => <MaterialIcons name="shopping-cart" size={30} color={focused ? 'white' : 'black'}/>,
+                    tabBarLabel: ({focused}) => <Text style={{...styles.label, color: focused ? 'white': 'black'}}>Mis Compras</Text>
+                }}
+            />
+            <Tab.Screen name="Notifications" component={Notifications}
+                options={{
+                    tabBarIcon: ({focused}) => <MaterialIcons name="notifications-active" size={30} color={focused ? 'white' : 'black'}/>,
+                    tabBarLabel: ({focused}) => <Text style={{...styles.label, color: focused ? 'white': 'black'}}>Notificaciones</Text>
+                }}
+            />
+        </Tab.Navigator>
     )
 }
 
 export default Home
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    button: {
-        backgroundColor: '#0782f9',
-        width: '60%',
-        padding: 15,
-        borderRadius: 10,
-        alignItems: 'center',
-        marginTop: 40
-    },
-    buttonText: {
-        color: 'white',
-        fontWeight: '700',
-        fontSize: 16
-    },
-});
+    label: {
+        fontSize: 12,
+        marginBottom: 5,
+        fontWeight: 'bold'
+    }
+})

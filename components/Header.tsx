@@ -3,8 +3,10 @@ import { StyleSheet, Text, SafeAreaView, StatusBar, View } from 'react-native'
 import { colors } from '../global.styles'
 import Center from './Center'
 import { FontAwesome5 } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const Header = () => {
+const Header = ({ navigation }: any) => {
+    
     return (
         <SafeAreaView style={styles.header}>
             {/* header bar */}
@@ -14,7 +16,11 @@ const Header = () => {
 
             {/* user logo */}
             <Center>
-                <FontAwesome5 name="user-cog" size={30} color={colors.secondaryLight}/>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('Profile')}
+                >
+                    <FontAwesome5 name="user-cog" size={30} color={colors.secondaryLight}/>
+                </TouchableOpacity>
             </Center>
 
         </SafeAreaView>
@@ -26,7 +32,6 @@ export default Header
 const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
-        marginTop: StatusBar.currentHeight,
         height: 60,
         backgroundColor: colors.secondaryDark,
     },

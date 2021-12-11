@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import Center from '../components/Center'
+import Content from '../components/Content'
+import Logo from '../components/Logo'
 import { auth } from '../firebase.config'
-import Loading from './Loading'
+import { colors, container } from '../global.styles'
+import Loading from '../components/Loading'
+import ModalLoading from '../components/ModalLoading'
+import { useForm } from 'react-hook-form'
+import InputLabel from '../components/InputLabel'
 
 const Login = ({ navigation }: any) => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
     const [ready, setReady] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const { control, handleSubmit } = useForm()
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(auth.getAuth(), user => {
@@ -19,104 +26,90 @@ const Login = ({ navigation }: any) => {
     }, [])
 
     const register = () => {
-        auth.createUserWithEmailAndPassword(auth.getAuth(), email, password)
-        .then(user => {
-            console.log(user.user.email)
-        })
-        .catch(e => alert(e))
+        navigation.navigate('Register')
     }
 
-    const login = () => {
-        auth.signInWithEmailAndPassword(auth.getAuth(), email, password)
+    const login = ({ email, contraseña }: {email: string, contraseña: string}) => {
+        setLoading(true)
+        auth.signInWithEmailAndPassword(auth.getAuth(), email, contraseña)
         .then(user => {
             console.log(user.user.email)
         })
-        .catch(e => alert(e))
+        .catch(e => {
+            setLoading(false)
+            alert(e)
+        }) 
+
     }
 
     return ready ? (
-        <KeyboardAvoidingView style={styles.container} behavior="padding">
-            <View style={styles.inputContainer}>
-                <TextInput 
-                    placeholder="Email"
-                    value={email}
-                    onChangeText={email => setEmail(email)}
-                    style={styles.input}
-                />
-                <TextInput 
-                    placeholder="Password"
-                    value={password}
-                    onChangeText={pass => setPassword(pass)}
-                    style={styles.input}
-                    secureTextEntry
-                />
+        <Content>
+            <ModalLoading visible={loading}/>
+            {/* logo */}
+            <View style={styles.logo}>
+                <Logo />
             </View>
 
-            <View style={styles.buttonContainer}>
+            
+            {/* form */}
+            <Center horizontal styles={{...container, paddingHorizontal: 50}}>
+                <InputLabel
+                    name='email'
+                    label='Email'
+                    control={control}
+                />
+
+                <InputLabel
+                    name='contraseña'
+                    label='Contraseña'
+                    control={control}
+                    styles={{marginTop: 15}}
+                    password
+                />
+
                 <TouchableOpacity
-                    onPress={login}
+                    onPress={handleSubmit(login)}
                     style={styles.button}
                 >
                     <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity> 
+                </TouchableOpacity>
+
+                <Text style={styles.question}>¿No estás registrado?</Text>
 
                 <TouchableOpacity
                     onPress={register}
-                    style={[styles.button, styles.buttonOutline]}
+                    style={{...styles.button, backgroundColor: colors.primaryDark, marginTop: 25}}
                 >
-                    <Text style={styles.buttonOutlineText}>Register</Text>
-                </TouchableOpacity> 
-            </View>
-        </KeyboardAvoidingView>
+                    <Text style={{...styles.buttonText, color: 'black'}}>Registrarse</Text>
+                </TouchableOpacity>
+            </Center>
+        </Content>
     ) : <Loading />
 }
 
 export default Login
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    inputContainer: {
-        width: '80%'
-    },
-    input: {
-        backgroundColor: '#f5f5f5',
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        borderRadius: 10,
-        marginTop: 5
-    },
-    buttonContainer: {
-        width: '60%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 40
+    question: {
+        color: 'white',
+        fontWeight: 'bold',
+        marginTop: 50
     },
     button: {
-        backgroundColor: '#0782f9',
-        width: '100%',
+        backgroundColor: colors.primary,
         padding: 15,
-        borderRadius: 10,
-        alignItems: 'center'
-    },
-    buttonOutline: {
-        backgroundColor: 'white',
-        marginTop: 5,
-        borderColor: '#0782f9',
-        borderWidth: 2
+        borderRadius: 20,
+        alignItems: 'center',
+        width: 150,
+        marginTop: 50
     },
     buttonText: {
         color: 'white',
         fontWeight: '700',
         fontSize: 16
     },
-    buttonOutlineText: {
-        color: '#0782f9',
-        fontWeight: '700',
-        fontSize: 16
+    logo: {
+        alignItems: 'center',
+        marginTop: 50
     }
 });
