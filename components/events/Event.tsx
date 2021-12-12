@@ -4,12 +4,15 @@ import { colors, container } from '../../global.styles'
 import Button from '../Button'
 import Center from '../Center'
 import Content from '../Content'
-import ModalContent from '../ModalContent'
 import ModalImageEvent from './ModalImageEvent'
+import { MaterialIcons } from '@expo/vector-icons'
+import RoundedButton from '../RoundedButton'
 
 const Event = ({ route, navigation }: any) => {
     const { title, date, photos, appears, description } = route.params
     const [viewing, setViewing] = useState(false)
+    
+    const isCreator = true
 
     return (
         <Content styles={container} cart auth>
@@ -21,9 +24,20 @@ const Event = ({ route, navigation }: any) => {
             <Center>
                 <Text style={styles.title}>{title}</Text>
                 <Text style={styles.description}>{description}</Text>
-                <Text style={[styles.title, {fontSize: 18}]}>
-                    Fotos en las que Apareces: {appears}
-                </Text>
+
+                <View style={styles.flex}>
+                    <Text style={[styles.title, {fontSize: 18}]}>
+                        Fotos en las que Apareces: {appears}
+                    </Text>
+                    {
+                        isCreator && <RoundedButton 
+                            onPress={() => navigation.navigate('CreateEvent', {
+                                edit: true
+                            })}
+                            icon={<MaterialIcons name='edit' size={30}/>}
+                        />   
+                    }
+                </View>
                 
                 <ScrollView contentContainerStyle={styles.imagesContainer} 
                 style={{marginVertical: 15}}>  
@@ -46,7 +60,7 @@ const Event = ({ route, navigation }: any) => {
 
                 <Button 
                     title="Comprar Todas"
-                    onPress={() => null}
+                    onPress={() => {}}
                     textColor="white"
                 />
             </Center>
@@ -76,5 +90,11 @@ const styles = StyleSheet.create({
         height: 120,
         width: 120,
         margin: 7
-    }
+    },
+    flex: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        justifyContent: 'space-between'
+    } 
 })

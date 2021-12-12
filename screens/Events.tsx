@@ -8,6 +8,7 @@ import Loading from '../components/Loading'
 import { colors, container } from '../global.styles'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
 import PopUpMessage from '../components/PopUpMessage'
+import RoundedButton from '../components/RoundedButton'
 
 const Events = ({ navigation }: any) => {
     const [data, setData] = useState<any>()
@@ -83,13 +84,10 @@ const Events = ({ navigation }: any) => {
                 </View>
 
                 {/* add button */}
-                <TouchableOpacity style={styles.addButton}
+                <RoundedButton 
                     onPress={() => navigation.navigate('CreateEvent')}
-                >
-                    <Center>
-                        <MaterialIcons name='add' size={30}/>
-                    </Center>
-                </TouchableOpacity>                
+                    icon={<MaterialIcons name='add' size={30}/>}
+                />            
             </View>
 
             {/* events cards */}
@@ -123,11 +121,5 @@ const styles = StyleSheet.create({
         width: 60,
         backgroundColor: colors.secondaryLight,
         borderRadius: 15
-    },
-    addButton: {
-        backgroundColor: colors.secondaryLight,
-        borderRadius: 30,
-        width: 60,
-        height: 60
-    }   
+    }
 })
