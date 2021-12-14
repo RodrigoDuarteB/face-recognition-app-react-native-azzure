@@ -1,10 +1,15 @@
 import React, { Fragment } from 'react'
-import { View } from 'react-native'
 
-const ConditionalRender = ({condition, children }: {condition: boolean, children: any}) => {
+interface Props {
+    condition: boolean
+    children?: any
+    fallback?: React.ReactNode
+}
+
+const ConditionalRender = ({condition, children, fallback }: Props) => {
     return condition ? (
         children
-    ) : <Fragment />
+    ) : fallback ? fallback : <Fragment />
 }
 
 export default ConditionalRender

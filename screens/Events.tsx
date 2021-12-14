@@ -3,12 +3,10 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-nati
 import Center from '../components/Center'
 import Content from '../components/Content'
 import EventBadge from '../components/events/EventBadge'
-import FutureRender from '../components/FutureRender'
-import Loading from '../components/Loading'
 import { colors, container } from '../global.styles'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
-import PopUpMessage from '../components/PopUpMessage'
 import RoundedButton from '../components/RoundedButton'
+import { currentUser } from '../services/AuthService'
 
 const Events = ({ navigation }: any) => {
     const [data, setData] = useState<any>()
@@ -16,6 +14,7 @@ const Events = ({ navigation }: any) => {
     const [filter, setFilter] = useState({name: 'Fecha', ref: 'date'})
 
     useEffect(() => {
+        console.log(currentUser?.uid)
     }, [data])
 
     const switchDirection = () => {

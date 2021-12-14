@@ -1,6 +1,10 @@
+import { Photographer } from "./Photographer";
+
 export interface User {
-    id: string
+    id?: string
     email: string
     password?: string
-    name: string
+    name: string,
+    photos: string[],
+    photographer?: Photographer
 }

@@ -5,7 +5,7 @@ import { TextInput } from 'react-native-gesture-handler'
 import { colors } from '../global.styles'
 
 interface Props {
-    name: string, label?: string, control: any, password?: boolean, styles?: any
+    name: string, label: string, control: any, password?: boolean, styles?: any
 }
 
 const InputLabel = ({ name, label, control, password, styles }: Props) => {
@@ -17,12 +17,12 @@ const InputLabel = ({ name, label, control, password, styles }: Props) => {
 
     return (
         <View style={{width: '100%', ...styles}}>
-            <Text style={internStyles.label}>{label ? label : name}</Text>
+            <Text style={internStyles.label}>{label}</Text>
             <TextInput 
                 value={field.value}
                 onChangeText={field.onChange}
                 style={internStyles.input}
-                placeholder={name}
+                placeholder={label}
                 secureTextEntry={password}
             />
         </View>

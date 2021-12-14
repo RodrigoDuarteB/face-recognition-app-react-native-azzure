@@ -4,14 +4,15 @@ import Button from '../components/Button'
 import Center from '../components/Center'
 import Content from '../components/Content'
 import ModalLoading from '../components/ModalLoading'
-import { auth } from '../firebase.config'
+import { logout as logoutService } from '../services/AuthService'
 
 const Profile = ({ navigation }: any) => {
     const [loading, setLoading] = useState(false)
 
-    const logout = () => {
+    const logout = async () => {
         setLoading(true)
-        auth.signOut(auth.getAuth())
+      
+        logoutService()
         .then(_ => {
             setLoading(false)
             navigation.reset({
@@ -22,7 +23,7 @@ const Profile = ({ navigation }: any) => {
         .catch(e => {
             setLoading(false)
             alert(e.message)
-        })
+        })      
     }
 
     return (

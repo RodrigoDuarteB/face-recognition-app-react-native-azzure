@@ -3546,6 +3546,13 @@ expo-permissions@^11.0.0:
   resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-11.0.0.tgz#10889073121fea42bbfc35f09a35fa17a316b233"
   integrity sha512-5+sFdU1HS/4aK9O7AsoLSNjG4f0UzlA3/nBHOPnWxxY2HRFnQp764tSsfSJRnGhM89Qxort6n2RzOusMoNP5ig==
 
+expo-screen-capture@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/expo-screen-capture/-/expo-screen-capture-4.0.3.tgz#ba60f2462c40d67cc1908b468dc2584fc8aff281"
+  integrity sha512-sN95T/mEGIT8aRgvmFobln0ALBNT0mSQ2fPxzpWYnd2WTsBt5IVZoUPf/8cGvEfNr1MIRhcNeVmQr2Af8ScARA==
+  dependencies:
+    expo-modules-core "~0.4.4"
+
 expo-screen-orientation@^3.0.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/expo-screen-orientation/-/expo-screen-orientation-3.3.0.tgz#790ca327af7d949e44734c861c09457fe1e00d52"
@@ -5843,6 +5850,11 @@ react-native-gesture-handler@~1.10.2:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
+react-native-popup-confirm-toast@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-popup-confirm-toast/-/react-native-popup-confirm-toast-2.0.3.tgz#67d913b53a62f9267631c68ad373e8d83e262423"
+  integrity sha512-DNl7PyA1MnM/a/8waTCVJrJPkKev1ga6NHV85onFsMjkC71JyO6ilTJc/I4geE/DRfUgxtRMWAtA/yl4D6Ws/A==
+
 react-native-reanimated@~2.2.0:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.2.4.tgz#36c5d15028b0bd7d479fba5199117ac870c7a532"
@@ -5864,6 +5876,11 @@ react-native-screens@~3.8.0:
   integrity sha512-lHrnB/elAoMJKv8O12U6BLgeup4lB6ZKJHEOVuG/D72nv/OE9wUusbou6YCB5tp3YbaSpHflPnkFmHA/vCejpw==
   dependencies:
     warn-once "^0.1.0"
+
+react-native-status-bar-height@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-status-bar-height/-/react-native-status-bar-height-2.6.0.tgz#b6afd25b6e3d533c43d0fcdcfd5cafd775592cea"
+  integrity sha512-z3SGLF0mHT+OlJDq7B7h/jXPjWcdBT3V14Le5L2PjntjjWM3+EJzq2BcXDwV+v67KFNJic5pgA26cCmseYek6w==
 
 react-native-web@0.17.1:
   version "0.17.1"

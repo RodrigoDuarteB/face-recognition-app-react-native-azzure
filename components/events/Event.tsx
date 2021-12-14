@@ -7,8 +7,10 @@ import Content from '../Content'
 import ModalImageEvent from './ModalImageEvent'
 import { MaterialIcons } from '@expo/vector-icons'
 import RoundedButton from '../RoundedButton'
+import { usePreventScreenCapture } from 'expo-screen-capture'
 
 const Event = ({ route, navigation }: any) => {
+    usePreventScreenCapture()
     const { title, date, photos, appears, description } = route.params
     const [viewing, setViewing] = useState(false)
     
