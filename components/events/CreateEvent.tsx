@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { StyleSheet, Text } from 'react-native'
-import DatePicker from 'react-native-date-picker'
+import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { container } from '../../global.styles'
+import { colors, container, input, label, title } from '../../global.styles'
 import Button from '../Button'
 import Center from '../Center'
 import Content from '../Content'
@@ -16,38 +15,58 @@ const CreateEvent = ({ route, navigation }: any) => {
     const [date, setDate] = useState(new Date())
     const [picking, setPicking] = useState(false)
     const params: any = route.params
-    const { control } = useForm()
+    const { control, handleSubmit } = useForm({
+        defaultValues: {
+            date,
+            photographers: []
+        }
+    })
+
+    const onChangeDate = (event: any, date?: Date) => {
+        setPicking(!picking)
+        setDate(date!)
+    }
+
+    const save = (data: any) => {
+        alert(JSON.stringify(data))
+    }
 
     return (
         <Content auth styles={container}>
-            <Text>{ params && params.edit ? 'Editar Evento' : 'Crear Evento'}</Text>
+            <Text style={title}>{ params && params.edit ? 'Editar Evento' : 'Crear Evento'}</Text>
             <Center>
                 <InputLabel 
                     name='title'
                     label='Nombre'
                     control={control}
+                    styles={{marginVertical: 15}}
                 />
+
                 <InputLabel 
                     name='description'
                     label='Descripcion'
                     control={control}
+                    styles={{marginBottom: 15}}
+                    multiline
                 />
 
-                    <Button 
-                        title="Fecha"
-                        onPress={() => setPicking(!picking)}
-                    />
+                <Text style={[label, {width: '100%'}]}>Fecha</Text>
+                <TouchableOpacity 
+                    style={[input, {width: '100%', marginBottom: 15}]} 
+                    onPress={() => setPicking(!picking)}
+                >
+                    <Text style={styles.date}>{date.toLocaleDateString()}</Text>
+                </TouchableOpacity>
+
                 <ConditionalRender condition={picking}>
                     <DateTimePicker
-                        testID="dateTimePicker"
                         value={date}
-                        is24Hour={true}
                         display="default"
-                        onChange={() => {}} 
+                        onChange={onChangeDate} 
                     />
                 </ConditionalRender>
 
-                <Text>Fotografos</Text>
+                <Text style={[label, {fontSize: 20}]}>Fotógrafos</Text>
                 
                 <ScrollView style={{width: '100%', marginVertical: 15}}>
                     <PhotographerBadge />
@@ -62,7 +81,7 @@ const CreateEvent = ({ route, navigation }: any) => {
 
                 <Button 
                     title={ params && params.edit ? 'Editar Evento' : 'Crear Evento'}
-                    onPress={() => {}}
+                    onPress={handleSubmit(save)}
                 />
             </Center>
         </Content>
@@ -71,4 +90,10 @@ const CreateEvent = ({ route, navigation }: any) => {
 
 export default CreateEvent
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    date: {
+        textAlign: 'center',
+        fontSize: 22,
+        fontWeight: 'bold'
+    }
+})

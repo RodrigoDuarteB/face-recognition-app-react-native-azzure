@@ -1,14 +1,19 @@
 import React from 'react'
 import { useController } from 'react-hook-form'
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, TextStyle, View, ViewStyle } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
-import { colors } from '../global.styles'
+import { label as labelStyle, input } from '../global.styles'
 
 interface Props {
-    name: string, label: string, control: any, password?: boolean, styles?: any
+    name: string
+    label: string
+    control: any
+    password?: boolean
+    multiline?: boolean
+    styles?: ViewStyle | TextStyle
 }
 
-const InputLabel = ({ name, label, control, password, styles }: Props) => {
+const InputLabel = ({ name, label, control, password, styles, multiline }: Props) => {
     const { field } = useController({
         name,
         control,
@@ -17,13 +22,15 @@ const InputLabel = ({ name, label, control, password, styles }: Props) => {
 
     return (
         <View style={{width: '100%', ...styles}}>
-            <Text style={internStyles.label}>{label}</Text>
+            <Text style={[labelStyle]}>{label}</Text>
             <TextInput 
                 value={field.value}
                 onChangeText={field.onChange}
-                style={internStyles.input}
+                style={input}
                 placeholder={label}
                 secureTextEntry={password}
+                multiline={multiline}
+                numberOfLines={multiline ? 4 : 1}
             />
         </View>
     )
@@ -31,19 +38,3 @@ const InputLabel = ({ name, label, control, password, styles }: Props) => {
 
 export default InputLabel
 
-const internStyles = StyleSheet.create({
-    input: {
-        backgroundColor: colors.secondaryLight,
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        borderRadius: 20,
-        marginTop: 5,
-        fontSize: 15,
-        fontWeight: '700'
-    },
-    label: {
-        color: 'white',
-        fontSize: 18,
-        fontWeight: 'bold'
-    },
-})
