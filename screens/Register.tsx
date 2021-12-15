@@ -12,7 +12,7 @@ import InputLabel from '../components/InputLabel'
 import { MaterialIcons } from '@expo/vector-icons'
 import Button from '../components/Button'
 import ModalMediaSelector from '../components/ModalMediaSelector'
-import { onAuthStateChanged, register } from '../services/AuthService'
+import { onAuthStateChanges, register } from '../services/AuthService'
 import Loading from '../components/Loading'
 
 const Register = ({ navigation }: any) => {
@@ -30,12 +30,12 @@ const Register = ({ navigation }: any) => {
 
     useEffect(() => {
         setReady(true)
-        const unsuscribe = onAuthStateChanged(user => {
+        const unsuscribe = onAuthStateChanges(user => {
             if(user){
                 navigation.replace('Home')
             }
-            setReady(false)
         })
+        setReady(false)
         return unsuscribe
     }, [])
 

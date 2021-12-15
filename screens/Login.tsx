@@ -9,7 +9,7 @@ import ModalLoading from '../components/ModalLoading'
 import { useForm } from 'react-hook-form'
 import InputLabel from '../components/InputLabel'
 import Button from '../components/Button'
-import { login as loginService, onAuthStateChanged } from '../services/AuthService'
+import { login as loginService, onAuthStateChanges } from '../services/AuthService'
 import ConditionalRender from '../components/ConditionalRender'
 
 const Login = ({ navigation }: any) => {
@@ -18,7 +18,7 @@ const Login = ({ navigation }: any) => {
     const { control, handleSubmit } = useForm()
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(user => {
+        const unsubscribe = onAuthStateChanges(user => {
             if(user){
                 navigation.replace('Home')
             }

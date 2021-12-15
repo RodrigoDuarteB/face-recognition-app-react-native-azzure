@@ -2,23 +2,22 @@ import React, { useEffect, useState } from 'react'
 
 interface Props {
     promise: Promise<any>
-    loading: React.ReactNode
+    onLoading: React.ReactNode
     receive: (params: any) => any
     children?: any
 }
 
-const FutureRender = ({ promise, loading, receive, children }: Props) => {
+const FutureRender = ({ promise, onLoading, receive, children }: Props) => {
     const [ready, setReady] = useState(false)
 
     useEffect(() => {
-        promise.then( async res => {
-            const data = await res.json()
-            receive(data)
+        promise.then(res => {
+            receive(res)
             setReady(true)
         })
     }, [])
 
-    return ready ? children : loading
+    return ready ? children : onLoading
 }
 
 export default FutureRender

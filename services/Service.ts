@@ -1,23 +1,28 @@
-import { storage, store } from "../firebase.config"
+import { getDocs, getFirestore, query, where, collection, addDoc, QueryDocumentSnapshot, DocumentData, QueryConstraint } from "firebase/firestore"
+import { getStorage, ref, uploadBytes } from "firebase/storage"
 
-const FIRESTORE = store.getFirestore()
-const STORAGE = storage.getStorage()
+const FIRESTORE = getFirestore()
+const STORAGE = getStorage()
 
-const getCollection = (collection: string) => store.collection(FIRESTORE, collection)
+const getCollection = (col: string) => collection(FIRESTORE, col)
 
 export const saveDataToCollection = async (collection: string, data: any): Promise<void> => {
-    await store.addDoc(getCollection(collection), data)
+    await addDoc(getCollection(collection), data)
 }
 
-export const getAllDataFromCollection = async (collection: string): Promise<store.QueryDocumentSnapshot<store.DocumentData>[]> => {
-    const res = await store.getDocs(getCollection(collection))
+export const getAllDataFromCollection = async (collection: string): Promise<QueryDocumentSnapshot<DocumentData>[]> => {
+    const res = await getDocs(getCollection(collection))
     return res.docs
 } 
 
 export const saveImage = async (uri: string, filename: string, folder: string): Promise<void> => {
-    const imagesRef = storage.ref(STORAGE, `${folder}/${filename}`)
+    const imagesRef = ref(STORAGE, `${folder}/${filename}`)
     const res = await fetch(uri)
     const blob = await res.blob()
-    await storage.uploadBytes(imagesRef, blob)   
-    
+    await uploadBytes(imagesRef, blob)      
+}
+
+export const getDataFromCollectionWithQuery = async (collection: string, qr: QueryConstraint): Promise<QueryDocumentSnapshot<DocumentData>[]> => {
+    const res = await getDocs(query(getCollection(collection), qr)) 
+    return res.docs    
 }

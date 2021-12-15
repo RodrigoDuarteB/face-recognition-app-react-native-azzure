@@ -6,16 +6,17 @@ import EventBadge from '../components/events/EventBadge'
 import { colors, container } from '../global.styles'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
 import RoundedButton from '../components/RoundedButton'
-import { currentUser } from '../services/AuthService'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { getAuth } from 'firebase/auth'
 
 const Events = ({ navigation }: any) => {
+    const [user] = useAuthState(getAuth())
     const [data, setData] = useState<any>()
     const [direction, setDirection] = useState('asc')
     const [filter, setFilter] = useState({name: 'Fecha', ref: 'date'})
 
     useEffect(() => {
-        console.log(currentUser?.uid)
-    }, [data])
+    }, [])
 
     const switchDirection = () => {
         if(direction === 'asc'){
@@ -39,60 +40,47 @@ const Events = ({ navigation }: any) => {
 
     return (
         <Content styles={container} cart auth>
-            {/* <FutureRender
-                loading={<Loading />}
-                promise={fetch('https://jsonplaceholder.typicode.com/posts')}
-                receive={(data: any) => setData(data)}
-            >
-                <ScrollView
-                    bounces={false}
-                >
-                    {
-                        data && data.map((e: any) => <Text key={e.id} style={{color: 'white'}}> - {e.title}</Text>)
-                    }
-                </ScrollView>
-            </FutureRender> */}
             <Text style={styles.title}>Eventos en los que apareces</Text>
 
-            {/* options */}
-            <View style={styles.optionsContainer}>
-                {/* filters */}
-                <View>
-                    <Text style={[styles.title, {fontSize: 15}]}>Filtos</Text>
-                    <View style={styles.optionsContainer}>
-                        <TouchableOpacity style={[styles.filterOptionContainer, {alignItems: 'center'}]}
-                            onPress={switchFilter}
-                        >
-                            <Text style={[styles.title, {fontSize: 13, color: 'black'}]}>
-                                {filter.name}
-                            </Text>
-                        </TouchableOpacity>
+                {/* options */}
+                <View style={styles.optionsContainer}>
+                    {/* filters */}
+                    <View>
+                        <Text style={[styles.title, {fontSize: 15}]}>Filtos</Text>
+                        <View style={styles.optionsContainer}>
+                            <TouchableOpacity style={[styles.filterOptionContainer, {alignItems: 'center'}]}
+                                onPress={switchFilter}
+                            >
+                                <Text style={[styles.title, {fontSize: 13, color: 'black'}]}>
+                                    {filter.name}
+                                </Text>
+                            </TouchableOpacity>
 
-                        <TouchableOpacity style={[styles.filterOptionContainer, {marginLeft: 10}]}
-                            onPress={switchDirection}
-                        >
-                            <Center>
-                            {
-                                direction === 'asc' ? 
-                                <FontAwesome name="sort-asc" size={20}/> :
-                                <FontAwesome name="sort-desc" size={20}/> 
-                            }
-                            </Center>
-                        </TouchableOpacity>
+                            <TouchableOpacity style={[styles.filterOptionContainer, {marginLeft: 10}]}
+                                onPress={switchDirection}
+                            >
+                                <Center>
+                                {
+                                    direction === 'asc' ? 
+                                    <FontAwesome name="sort-asc" size={20}/> :
+                                    <FontAwesome name="sort-desc" size={20}/> 
+                                }
+                                </Center>
+                            </TouchableOpacity>
+                        </View>
                     </View>
+
+                    {/* add button */}
+                    <RoundedButton 
+                        onPress={() => navigation.navigate('CreateEvent')}
+                        icon={<MaterialIcons name='add' size={30}/>}
+                    />            
                 </View>
 
-                {/* add button */}
-                <RoundedButton 
-                    onPress={() => navigation.navigate('CreateEvent')}
-                    icon={<MaterialIcons name='add' size={30}/>}
-                />            
-            </View>
-
-            {/* events cards */}
-            <ScrollView>
-                <EventBadge data={event} />
-            </ScrollView>
+                {/* events cards */}
+                <ScrollView>
+                    <EventBadge data={event} />
+                </ScrollView>
         </Content>
     )
 }
