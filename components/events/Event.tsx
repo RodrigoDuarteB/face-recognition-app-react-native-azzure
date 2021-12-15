@@ -9,7 +9,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import RoundedButton from '../RoundedButton'
 import { usePreventScreenCapture } from 'expo-screen-capture'
 
-const Event = ({ route, navigation }: any) => {
+const Event = ({ route, navigation }: any): JSX.Element => {
     usePreventScreenCapture()
     const { title, date, photos, appears, description } = route.params
     const [viewing, setViewing] = useState(false)
