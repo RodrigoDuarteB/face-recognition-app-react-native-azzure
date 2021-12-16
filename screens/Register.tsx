@@ -48,7 +48,6 @@ const Register = ({ navigation }: any) => {
     }
 
     const save = (data: any) => {
-        //alert(JSON.stringify(data))
         setSaving(true)
         register({
             name: data.name,
@@ -92,6 +91,7 @@ const Register = ({ navigation }: any) => {
                             name='name'
                             label="Nombre"
                             control={control}
+                            required
                         />   
                         
                         <InputLabel 
@@ -99,6 +99,8 @@ const Register = ({ navigation }: any) => {
                             label="Email"
                             control={control}
                             styles={{marginTop: 15}}
+                            required
+                            email
                         />   
                         
                         <InputLabel 
@@ -107,6 +109,7 @@ const Register = ({ navigation }: any) => {
                             control={control}
                             styles={{marginTop: 15}}
                             password
+                            required
                         />   
 
                         <Text style={[styles.label, {width: '100%', marginTop: 15}]}>Fotos</Text>
@@ -173,6 +176,8 @@ const Register = ({ navigation }: any) => {
                                 label="Costo por Contrato"
                                 control={control}
                                 styles={{marginTop: 15}}
+                                required
+                                numeric
                             />
 
                             <InputLabel 
@@ -180,6 +185,8 @@ const Register = ({ navigation }: any) => {
                                 label="Costo Digital por Foto"
                                 control={control}
                                 styles={{marginTop: 15}}
+                                required
+                                numeric
                             />
 
                             <InputLabel 
@@ -187,6 +194,8 @@ const Register = ({ navigation }: any) => {
                                 label="Costo Impreso por Foto"
                                 control={control}
                                 styles={{marginVertical: 15}}
+                                required
+                                numeric
                             />
                         </ConditionalRender>
 

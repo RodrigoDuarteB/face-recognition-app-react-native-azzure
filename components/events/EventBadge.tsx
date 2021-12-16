@@ -2,14 +2,15 @@ import { useNavigation } from '@react-navigation/core'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { colors } from '../../global.styles'
+import { Event } from '../../models/Event'
 import Center from '../Center'
 
 interface Props {
-    data: any
+    data: Event
 }
 
 const EventBadge = ({ data }: Props) => {
-    const { title, date, photos, appears } = data
+    const { title, date, photos } = data
 
     const navigation: any = useNavigation()
 
@@ -18,12 +19,12 @@ const EventBadge = ({ data }: Props) => {
             onPress={() => navigation.navigate('Event', data)}
         >
             <Center>
-                <Text>{title}</Text>
+                <Text style={styles.text}>{title}</Text>
                 <View style={styles.flex}>
-                    <Text>Fecha: {date}</Text>
-                    <Text>Fotos: {photos}</Text>
+                    <Text style={styles.text}>Fecha: {date.toLocaleDateString()}</Text>
+                    <Text style={styles.text}>Fotos: {photos!.length}</Text>
                 </View>
-                <Text>Fotos en las que apareces: {appears}</Text>
+                <Text style={styles.text}>Fotos en las que apareces: {0}</Text>
             </Center>
         </TouchableOpacity>
     )
@@ -35,10 +36,16 @@ const styles = StyleSheet.create({
     eventCard: {
         backgroundColor: colors.secondaryLight,
         height: 100,
-        borderRadius: 20
+        borderRadius: 20,
+        marginVertical: 5
     },
     flex: {
+        width: '100%',
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-around'
     },
+    text: {
+        fontSize: 16,
+        fontWeight: 'bold'
+    }
 })

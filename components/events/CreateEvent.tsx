@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { colors, container, input, label, title } from '../../global.styles'
+import { container, input, label, title } from '../../global.styles'
 import Button from '../Button'
 import Center from '../Center'
 import Content from '../Content'
@@ -11,19 +11,22 @@ import PhotographerBadge from './PhotographerBadge'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import ConditionalRender from '../ConditionalRender'
 import { saveEvent } from '../../services/EventService'
-import { currentUser } from '../../services/AuthService'
 import { getPhotographers } from '../../services/UserService'
 import { Photographer } from '../../models/Photographer'
 import Loading from '../Loading'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { getAuth } from 'firebase/auth'
 
 const CreateEvent = ({ route, navigation }: any) => {
+    const [user] = useAuthState(getAuth())
     const [fetching, setFetching] = useState(false)
     const [photographers, setPhotographers] = useState<Photographer[]>([])
     const [date, setDate] = useState(new Date())
     const [picking, setPicking] = useState(false)
     const [saving, setSaving] = useState(false)
+    const [choosed, setChoosed] = useState<string[]>([])
     const params: any = route.params
-    const { control, handleSubmit } = useForm({
+    const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             date,
             photographers: []
@@ -38,6 +41,15 @@ const CreateEvent = ({ route, navigation }: any) => {
             setFetching(false)
         })
     }, [])
+
+
+    const addPhotographers = (id: string) => {
+        if(choosed.includes(id)){
+            setChoosed(choosed.filter((e) => e != id))
+        }else{
+            choosed.push(id)
+        }
+    }
 
     const onChangeDate = (event: any, date?: Date) => {
         setPicking(!picking)
@@ -54,18 +66,17 @@ const CreateEvent = ({ route, navigation }: any) => {
                 title: data.title,
                 description: data.description,
                 date,
-                createdBy: currentUser!.uid,
-                photographers: data.photographers
+                createdBy: user!.uid,
+                photographers: choosed
             })
             .then(_ => {
                 setSaving(false)
-                navigation.replace('Events')
+                navigation.replace('Home')
             })
             .catch(e => {
                 setSaving(false)
                 alert(e)
             })
-            alert(JSON.stringify(data))
         }
     }
 
@@ -76,9 +87,10 @@ const CreateEvent = ({ route, navigation }: any) => {
                 <Center>
                     <InputLabel 
                         name='title'
-                        label='Nombre'
+                        label='Titulo'
                         control={control}
                         styles={{marginVertical: 15}}
+                        required
                     />
 
                     <InputLabel 
@@ -108,14 +120,16 @@ const CreateEvent = ({ route, navigation }: any) => {
                     <Text style={[label, {fontSize: 20}]}>Fotógrafos</Text>
                     
                     <ScrollView style={{width: '100%', marginVertical: 15}}>
-                        <PhotographerBadge />
-                        <PhotographerBadge />
-                        <PhotographerBadge />
-                        <PhotographerBadge />
-                        <PhotographerBadge />
-                        <PhotographerBadge />
-                        <PhotographerBadge />
-                        <PhotographerBadge />
+                        {
+                            photographers.sort((a, b) => a.contractCost - b.contractCost)
+                            .map(ph => 
+                                <PhotographerBadge 
+                                    key={ph.user!.id} 
+                                    data={ph}
+                                    onPress={(id) => addPhotographers(id)}
+                                />
+                            )
+                        }
                     </ScrollView>
 
                     <Button 

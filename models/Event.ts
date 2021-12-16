@@ -1,3 +1,10 @@
+import { User } from "./User";
+
+interface Appearence {
+    user: User,
+    appearences: number
+}
+
 export interface Event {
     id?: string
     title: string
@@ -6,4 +13,5 @@ export interface Event {
     createdBy: string
     photographers: string[]
     photos?: string[]
+    appearances?: Appearence[]
 }

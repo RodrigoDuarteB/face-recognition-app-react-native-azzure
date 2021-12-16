@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 
 interface Props {
-    condition: boolean | undefined | null
+    condition: boolean | undefined | null | any
     children?: any
     fallback?: React.ReactNode
 }

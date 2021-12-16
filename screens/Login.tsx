@@ -56,6 +56,8 @@ const Login = ({ navigation }: any) => {
                         name='email'
                         label='Email'
                         control={control}
+                        required
+                        email
                     />
 
                     <InputLabel
@@ -64,6 +66,7 @@ const Login = ({ navigation }: any) => {
                         control={control}
                         styles={{marginTop: 15}}
                         password
+                        required
                     />
 
                     <Button 

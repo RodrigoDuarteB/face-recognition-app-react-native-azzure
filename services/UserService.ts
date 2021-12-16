@@ -3,16 +3,28 @@ import { Photographer } from "../models/Photographer";
 import { User } from "../models/User";
 import { getAllDataFromCollection, getDataFromCollectionWithQuery, saveDataToCollection } from "./Service";
 
-const user_data = 'users'
+const usersRef = 'users'
 
 export const saveUserData = async (user: User): Promise<void> => {
-    await saveDataToCollection(user_data, user)
+    let data: any = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        photos: user.photos
+    }
+    if(user.photographer){
+        data = {
+            ...data,
+            photographer: user.photographer
+        }
+    }
+    await saveDataToCollection(usersRef, data)
 }
 
 
-export const isPhotographer = async (userId: string): Promise<Photographer | boolean> => {
-    const res = await getDataFromCollectionWithQuery(user_data, 
-        where('userId', '==', userId))
+export const userIsPhotographer = async (userId: string): Promise<Photographer | boolean> => {
+    const res = await getDataFromCollectionWithQuery(usersRef, 
+        where('id', '==', userId))
     if(res.length > 0){
         const userData = res[0].data()
         if(userData.photographer){
@@ -29,7 +41,7 @@ export const isPhotographer = async (userId: string): Promise<Photographer | boo
 
 export const getPhotographers = async (): Promise<Photographer[]> => {
     const photographers: Photographer[] = []
-    const res = await getAllDataFromCollection(user_data)
+    const res = await getAllDataFromCollection(usersRef)
     res.map(el => {
         const data = el.data()
         if(data.photographer){
