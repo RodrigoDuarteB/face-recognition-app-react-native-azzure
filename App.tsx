@@ -8,23 +8,27 @@ import Register from './screens/Register';
 import CreateEvent from './components/events/CreateEvent';
 import Event from './components/events/Event';
 import Cart from './screens/Cart';
+import { Provider } from 'react-redux'
+import store from './store';
 
 const Stack = createNativeStackNavigator()
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="Home" component={Home}/>
-        <Stack.Screen name="Profile" component={Profile}/>
-        <Stack.Screen name="CreateEvent" component={CreateEvent}/>
-        <Stack.Screen name="Event" component={Event}/>
-        <Stack.Screen name="Cart" component={Cart}/>
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="Home" component={Home}/>
+          <Stack.Screen name="Profile" component={Profile}/>
+          <Stack.Screen name="CreateEvent" component={CreateEvent}/>
+          <Stack.Screen name="Event" component={Event}/>
+          <Stack.Screen name="Cart" component={Cart}/>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
+  )
 }
 
 export default App
