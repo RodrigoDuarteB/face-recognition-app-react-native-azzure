@@ -16,8 +16,9 @@ import { Photographer } from '../../models/Photographer'
 import Loading from '../Loading'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
+import { connect } from 'react-redux'
 
-const CreateEvent = ({ route, navigation }: any) => {
+const CreateEvent = ({ route, navigation, addItemToCart }: any) => {
     const [user] = useAuthState(getAuth())
     const [fetching, setFetching] = useState(false)
     const [photographers, setPhotographers] = useState<Photographer[]>([])
@@ -82,7 +83,7 @@ const CreateEvent = ({ route, navigation }: any) => {
 
     return (
         <ConditionalRender condition={!fetching} fallback={<Loading />}>
-            <Content auth styles={container}>
+            <Content auth cart styles={container}>
                 <Text style={title}>{ params && params.edit ? 'Editar Evento' : 'Crear Evento'}</Text>
                 <Center>
                     <InputLabel 
@@ -126,7 +127,10 @@ const CreateEvent = ({ route, navigation }: any) => {
                                 <PhotographerBadge 
                                     key={ph.user!.id} 
                                     data={ph}
-                                    onPress={(id) => addPhotographers(id)}
+                                    onPress={(id) => {
+                                        addPhotographers(id)
+                                        addItemToCart(ph)
+                                    }}
                                 />
                             )
                         }
@@ -142,7 +146,16 @@ const CreateEvent = ({ route, navigation }: any) => {
     )
 }
 
-export default CreateEvent
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        addItemToCart: (item: any) => dispatch({
+            type: 'ADD',
+            payload: item
+        })
+    }
+}
+
+export default connect(null, mapDispatchToProps)(CreateEvent)
 
 const styles = StyleSheet.create({
     date: {
