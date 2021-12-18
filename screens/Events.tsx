@@ -49,6 +49,7 @@ const Events = ({ navigation }: any) => {
             reFilter()
             setFetching(false)
         })
+        .catch(e => setFetching(false))
     }, [])
 
     const reFilter = () => {
@@ -131,7 +132,7 @@ const Events = ({ navigation }: any) => {
 
                         {/* add button */}
                         <RoundedButton 
-                            onPress={() => navigation.navigate('CreateEvent')}
+                            onPress={() => navigation.navigate('Testing')}
                             icon={<MaterialIcons name='add' size={30}/>}
                         />            
                     </View>

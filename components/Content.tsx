@@ -1,13 +1,21 @@
 import { useNavigation } from '@react-navigation/core'
 import React, { useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { SafeAreaView, StyleSheet, View } from 'react-native'
+import { SafeAreaView, StyleSheet, View, ViewStyle } from 'react-native'
 import { auth as authentication } from '../firebase.config'
 import { colors, safeTop } from '../global.styles'
 import Loading from './Loading'
 import CartButton from './CartButton'
 
-const Content = ({children, safe, auth, styles, cart }: any) => {
+interface Props {
+    safe?: boolean,
+    children?: any
+    auth?: boolean
+    cart?: boolean
+    styles?: ViewStyle
+}
+
+const Content = ({children, safe, auth, styles, cart }: Props) => {
     const [user] = useAuthState(authentication.getAuth())
     const navigation: any = useNavigation()
 

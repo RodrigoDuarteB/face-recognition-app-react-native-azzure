@@ -1,13 +1,15 @@
 import { getAuth } from 'firebase/auth'
 import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { StyleSheet, Text } from 'react-native'
+import { useForm } from 'react-hook-form'
+import { Image, ScrollView, StyleSheet, Text } from 'react-native'
 import Button from '../components/Button'
 import Center from '../components/Center'
 import ConditionalRender from '../components/ConditionalRender'
 import Content from '../components/Content'
 import Loading from '../components/Loading'
 import ModalLoading from '../components/ModalLoading'
+import { container } from '../global.styles'
 import { User } from '../models/User'
 import { logout as logoutService } from '../services/AuthService'
 import { getUser } from '../services/UserService'
@@ -17,9 +19,13 @@ const Profile = ({ navigation }: any) => {
     const [user, setUser] = useState<User | null>()
     const [loading, setLoading] = useState(false)
     const [fetching, setFetching] = useState(false)
+    const { control } = useForm({
+        defaultValues: {
+            name: user ? user.name : ''
+        }
+    })
 
     useEffect(() => {
-        console.log(authUser)
         setFetching(true)
         getUser(authUser!.uid)
         .then(res => {
@@ -50,10 +56,18 @@ const Profile = ({ navigation }: any) => {
 
     return (
         <ConditionalRender condition={!fetching} fallback={<Loading />}>
-            <Content auth>
+            <Content auth styles={container}>
                 <ModalLoading visible={loading}/>
                 <Center>
-                    <Text>{user?.name}</Text>
+                    <Text>Perfil</Text>
+                    <ScrollView horizontal>
+                        {
+                            user && user.photos.map(photo => 
+                                <Image source={{uri: photo}} style={styles.image}/>
+                            )
+                        }
+                    </ScrollView>
+                    
                     <Button 
                         onPress={logout}
                         title="Cerrar Sesion"
@@ -66,4 +80,10 @@ const Profile = ({ navigation }: any) => {
 
 export default Profile
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    image: {
+        width: 120, 
+        height: 120,
+        margin: 10
+    }
+})

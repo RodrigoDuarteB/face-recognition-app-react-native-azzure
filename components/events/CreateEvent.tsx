@@ -53,8 +53,10 @@ const CreateEvent = ({ route, navigation, addItemToCart }: any) => {
     }
 
     const onChangeDate = (event: any, date?: Date) => {
+        if(date){
+            setDate(date!)
+        }
         setPicking(!picking)
-        setDate(date!)
     }
 
     const save = (data: any) => {
