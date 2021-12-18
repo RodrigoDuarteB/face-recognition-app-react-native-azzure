@@ -5,8 +5,8 @@ import Login from './screens/Login';
 import Home from './screens/Home';
 import Profile from './screens/Profile';
 import Register from './screens/Register';
-import CreateEvent from './components/events/CreateEvent';
-import Event from './components/events/Event';
+import CreateEvent from './screens/CreateEvent';
+import Event from './screens/Event';
 import Cart from './screens/Cart';
 import { Provider } from 'react-redux'
 import store from './store';

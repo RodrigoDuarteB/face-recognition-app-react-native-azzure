@@ -9,8 +9,8 @@ import Header from '../components/Header'
 import { MaterialIcons } from '@expo/vector-icons'
 import Notifications from './Notifications'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import CreateEvent from '../components/events/CreateEvent'
-import Event from '../components/events/Event'
+import CreateEvent from './CreateEvent'
+import Event from './Event'
 
 const Tab = createBottomTabNavigator()
 const EventsStack = createNativeStackNavigator()

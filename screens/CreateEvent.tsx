@@ -2,21 +2,22 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { container, input, label, title } from '../../global.styles'
-import Button from '../Button'
-import Center from '../Center'
-import Content from '../Content'
-import InputLabel from '../InputLabel'
-import PhotographerBadge from './PhotographerBadge'
+import { container, input, label, title } from '../global.styles'
+import Button from '../components/Button'
+import Center from '../components/Center'
+import Content from '../components/Content'
+import InputLabel from '../components/InputLabel'
+import PhotographerBadge from '../components/events/PhotographerBadge'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import ConditionalRender from '../ConditionalRender'
-import { saveEvent } from '../../services/EventService'
-import { getPhotographers } from '../../services/UserService'
-import { Photographer } from '../../models/Photographer'
-import Loading from '../Loading'
+import ConditionalRender from '../components/ConditionalRender'
+import { saveEvent } from '../services/EventService'
+import { getPhotographers } from '../services/UserService'
+import { Photographer } from '../models/Photographer'
+import Loading from '../components/Loading'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 import { connect } from 'react-redux'
+import Fallback from '../components/Fallback'
 
 const CreateEvent = ({ route, navigation, addItemToCart }: any) => {
     const [user] = useAuthState(getAuth())
@@ -38,7 +39,7 @@ const CreateEvent = ({ route, navigation, addItemToCart }: any) => {
         setFetching(true)
         getPhotographers()
         .then(res => {
-            setPhotographers(res)
+            setPhotographers(res.filter(ph => ph.user?.id != user?.uid))
             setFetching(false)
         })
     }, [])
@@ -124,19 +125,25 @@ const CreateEvent = ({ route, navigation, addItemToCart }: any) => {
                     <Text style={[label, {fontSize: 20}]}>Fotógrafos</Text>
                     
                     <ScrollView style={{width: '100%', marginVertical: 15}}>
-                        {
-                            photographers.sort((a, b) => a.contractCost - b.contractCost)
-                            .map(ph => 
-                                <PhotographerBadge 
-                                    key={ph.user!.id} 
-                                    data={ph}
-                                    onPress={(id) => {
-                                        addPhotographers(id)
-                                        addItemToCart(ph)
-                                    }}
-                                />
-                            )
-                        }
+                        <ConditionalRender condition={photographers.length > 0}
+                            fallback={
+                                <Fallback message='No hay fotógrafos disponibles'/>
+                            }
+                        >
+                            {
+                                photographers.sort((a, b) => a.contractCost - b.contractCost)
+                                .map(ph => 
+                                    <PhotographerBadge 
+                                        key={ph.user!.id} 
+                                        data={ph}
+                                        onPress={(id) => {
+                                            addPhotographers(id)
+                                            addItemToCart(ph)
+                                        }}
+                                    />
+                                )
+                            }
+                        </ConditionalRender>
                     </ScrollView>
 
                     <Button 

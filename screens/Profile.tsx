@@ -1,7 +1,6 @@
 import { getAuth } from 'firebase/auth'
 import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { useForm } from 'react-hook-form'
 import { Image, ScrollView, StyleSheet, Text } from 'react-native'
 import Button from '../components/Button'
 import Center from '../components/Center'
@@ -9,7 +8,8 @@ import ConditionalRender from '../components/ConditionalRender'
 import Content from '../components/Content'
 import Loading from '../components/Loading'
 import ModalLoading from '../components/ModalLoading'
-import { container } from '../global.styles'
+import StaticInputLabel from '../components/StaticInputLabel'
+import { container, title } from '../global.styles'
 import { User } from '../models/User'
 import { logout as logoutService } from '../services/AuthService'
 import { getUser } from '../services/UserService'
@@ -19,11 +19,6 @@ const Profile = ({ navigation }: any) => {
     const [user, setUser] = useState<User | null>()
     const [loading, setLoading] = useState(false)
     const [fetching, setFetching] = useState(false)
-    const { control } = useForm({
-        defaultValues: {
-            name: user ? user.name : ''
-        }
-    })
 
     useEffect(() => {
         setFetching(true)
@@ -59,7 +54,11 @@ const Profile = ({ navigation }: any) => {
             <Content auth styles={container}>
                 <ModalLoading visible={loading}/>
                 <Center>
-                    <Text>Perfil</Text>
+                    <Text style={title}>Mi Perfil</Text>
+
+                    <StaticInputLabel value={user!.name} label='Nombre' styles={{marginVertical: 5}}/>
+                    <StaticInputLabel value={user!.email} label='Email' styles={{marginVertical: 5}}/>
+
                     <ScrollView horizontal>
                         {
                             user && user.photos.map(photo => 

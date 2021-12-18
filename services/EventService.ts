@@ -67,7 +67,6 @@ export const getUserContractedEvents = async (userId: string): Promise<Event[]> 
             photos: data.photos ? data.photos : []
         })
     })
-    console.log(events)
     return events
 }
 

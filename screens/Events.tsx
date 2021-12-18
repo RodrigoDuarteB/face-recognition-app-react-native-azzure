@@ -101,7 +101,7 @@ const Events = ({ navigation }: any) => {
     return (
         <ConditionalRender condition={!fetching} fallback={<Loading />}>
             <Content styles={container} cart auth>
-                <Text style={styles.title}>Eventos en los que apareces</Text>
+                <Text style={title}>Eventos</Text>
 
                     {/* options */}
                     <View style={styles.optionsContainer}>
@@ -166,7 +166,7 @@ const Events = ({ navigation }: any) => {
 
                         {/* contracted events (only photographers) */}
                         <ConditionalRender condition={isPhotographer}>
-                            <Text style={title}>Eventos contratados</Text>
+                            <Text style={title}>Eventos contratados como Fotógrafo</Text>
                             <ConditionalRender condition={contractedEvents.length > 0}
                                 fallback={<Fallback message='Aún no hay Eventos en los que estes contratado'/>}
                             >
