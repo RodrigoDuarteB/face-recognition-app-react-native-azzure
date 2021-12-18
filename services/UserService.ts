@@ -22,6 +22,29 @@ export const saveUserData = async (user: User): Promise<void> => {
 }
 
 
+export const getUser = async (userId: string): Promise<User | null> => {
+    const res = await getDataFromCollectionWithQuery(usersRef,
+        where('userId', '==', userId))
+    console.log(res)
+    if(res.length > 0){
+        const firstUser = res[0].data()
+        let data: any = {
+            id: firstUser.id,
+            email: firstUser.email,
+            name: firstUser.name,
+            photos: firstUser.photos
+        }
+            if(firstUser.photographer){
+            data = {
+                ...data, 
+                photographer: firstUser.photographer
+            }
+        }
+    }
+    return null
+}
+
+
 export const userIsPhotographer = async (userId: string): Promise<Photographer | boolean> => {
     const res = await getDataFromCollectionWithQuery(usersRef, 
         where('id', '==', userId))
