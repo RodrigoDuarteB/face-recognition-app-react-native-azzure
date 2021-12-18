@@ -3,18 +3,17 @@ import { where } from 'firebase/firestore'
 import React, { useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { View, Text } from 'react-native'
-import { getAllDataFromCollection, getDataFromCollectionWithQueries } from '../services/Service'
+import { getAllDataFromCollection, getDataFromCollectionWithQueries, getImageUrl } from '../services/Service'
 import { getUser } from '../services/UserService'
 
 const Testing = () => {
     const [user] = useAuthState(getAuth())
 
     useEffect(() => {
-        alert(JSON.stringify(user!.uid))
-        getUser(user!.uid)
+        getImageUrl('event-images', 'WIvojsiTYvg3cRXuN1QF/1.PNG')
         .then(res => {
             //alert(res.length)
-            alert(JSON.stringify(res))
+            alert(res)
         })
         .catch(e => alert(e))
     }, [])

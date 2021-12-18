@@ -70,7 +70,8 @@ const CreateEvent = ({ route, navigation, addItemToCart }: any) => {
                 description: data.description,
                 date,
                 createdBy: user!.uid,
-                photographers: choosed
+                photographers: choosed,
+                photos: []
             })
             .then(_ => {
                 setSaving(false)

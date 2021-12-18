@@ -17,6 +17,7 @@ import Fallback from '../Fallback'
 const Event = ({ route, navigation }: any): JSX.Element => {
     usePreventScreenCapture()
     const { title, date, photos, description, createdBy }: ModelEvent = route.params
+    console.log(route.params)
     const [user] = useAuthState(getAuth())
     const [viewing, setViewing] = useState(false)
     
