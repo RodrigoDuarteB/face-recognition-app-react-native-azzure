@@ -153,7 +153,7 @@ const Events = ({ navigation }: any) => {
                         </ConditionalRender>
                         
                         {/* appeared events */}
-                        <Text style={title}>Eventos en los que aparezco</Text>
+                        <Text style={title}>Eventos en los que apareces</Text>
                         <ConditionalRender condition={appearedEvents.length > 0}
                             fallback={<Fallback message='Aún no hay Eventos en los que aparezcas'/>}
                         >
@@ -165,7 +165,7 @@ const Events = ({ navigation }: any) => {
                         </ConditionalRender>
 
                         {/* contracted events (only photographers) */}
-                        <ConditionalRender condition={isPhotographer}>
+                        <ConditionalRender condition={isPhotographer != false}>
                             <Text style={title}>Eventos contratados como Fotógrafo</Text>
                             <ConditionalRender condition={contractedEvents.length > 0}
                                 fallback={<Fallback message='Aún no hay Eventos en los que estes contratado'/>}

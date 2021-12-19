@@ -56,13 +56,13 @@ const Profile = ({ navigation }: any) => {
                 <Center>
                     <Text style={title}>Mi Perfil</Text>
 
-                    <StaticInputLabel value={user!.name} label='Nombre' styles={{marginVertical: 5}}/>
-                    <StaticInputLabel value={user!.email} label='Email' styles={{marginVertical: 5}}/>
+                    <StaticInputLabel value={user ? user.name : ''} label='Nombre' styles={{marginVertical: 5}}/>
+                    <StaticInputLabel value={user ? user.email : ''} label='Email' styles={{marginVertical: 5}}/>
 
                     <ScrollView horizontal>
                         {
-                            user && user.photos.map(photo => 
-                                <Image source={{uri: photo}} style={styles.image}/>
+                            user && user.photos.map((photo, index) => 
+                                <Image key={index} source={{uri: photo}} style={styles.image}/>
                             )
                         }
                     </ScrollView>
