@@ -4,7 +4,6 @@ import { User } from "../models/User";
 import { getAllDataFromCollection, getDataFromCollectionWithQueries, getImageUrl, saveDataToCollection } from "./Service";
 
 const usersRef = 'users'
-const usersStorageRef = 'user-images'
 
 export const saveUserData = async (user: User): Promise<void> => {
     let data: any = {
@@ -25,7 +24,7 @@ export const saveUserData = async (user: User): Promise<void> => {
 const getUserImages = async (photoNames: string[]): Promise<string[]> => {
     const images: string[] = []
     for(const name of photoNames){
-        images.push(await getImageUrl(usersStorageRef, name))
+        images.push(await getImageUrl(name))
     }
     return images
 }

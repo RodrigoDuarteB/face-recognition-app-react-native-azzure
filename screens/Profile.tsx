@@ -62,7 +62,11 @@ const Profile = ({ navigation }: any) => {
                     <ScrollView horizontal>
                         {
                             user && user.photos.map((photo, index) => 
-                                <Image key={index} source={{uri: photo}} style={styles.image}/>
+                                <Image 
+                                    key={index}
+                                    source={{uri: photo}}
+                                    style={styles.image}
+                                />
                             )
                         }
                     </ScrollView>

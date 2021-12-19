@@ -3,6 +3,8 @@ import { User as UserModel } from "../models/User";
 import { saveImage } from "./Service";
 import { saveUserData } from "./UserService";
 
+const usersStorageRef = 'user-images'
+
 const AUTH = getAuth()
 
 export const currentUser = AUTH.currentUser
@@ -13,13 +15,10 @@ export const login = async (email: string, password: string): Promise<void> => {
     await signInWithEmailAndPassword(AUTH, email, password)  
 }
 
-const saveImages = async (user: UserModel): Promise<string[]> => {
+const saveImages = async (userId: string, uris: string[]): Promise<string[]> => {
     var names: string[] = []
-    var urls = user.photos
-    for(let i=0; i<urls.length; i++){
-        const name = user.id! + (i + 1)
-        names.push(name)
-        await saveImage(urls[i], name, 'user-images')
+    for (const uri of uris) {
+        names.push(await saveImage(uri, usersStorageRef, userId))
     }
     return names
 }
@@ -30,7 +29,7 @@ export const register = async (user: UserModel): Promise<void> => {
     await updateProfile(AUTH.currentUser!, {
         displayName: user.name
     })
-    const photoNames = await saveImages(user)
+    const photoNames = await saveImages(uid, user.photos)
     user.photos = photoNames
     await saveUserData(user)
 }

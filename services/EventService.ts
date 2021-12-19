@@ -73,7 +73,7 @@ export const getUserContractedEvents = async (userId: string): Promise<Event[]> 
 export const getEventPhotos = async (photoNames: string[]): Promise<string[]> => {
     const images: string[] = []
     for (const name of photoNames) {
-        images.push(await getImageUrl(storageRef, name))
+        images.push(await getImageUrl(name))
     }
     return images
 }

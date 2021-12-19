@@ -15,15 +15,19 @@ export const getAllDataFromCollection = async (collection: string): Promise<Quer
     return res.docs
 } 
 
-export const saveImage = async (uri: string, filename: string, folder: string): Promise<void> => {
-    const imagesRef = ref(STORAGE, `${folder}/${filename}`)
+export const saveImage = async (uri: string, folder: string, subfolder?: string): Promise<string> => {
+    const splitted = uri.split('/')
+    const imageName = splitted[splitted.length - 1]
+    const url = subfolder ? `${folder}/${subfolder}/${imageName}` : `${folder}/${imageName}`
+    const imageRef = ref(STORAGE, url)
     const res = await fetch(uri)
     const blob = await res.blob()
-    await uploadBytes(imagesRef, blob)  
+    await uploadBytes(imageRef, blob)
+    return imageRef.fullPath
 }
 
-export const getImageUrl = async (folder: string, filename: string): Promise<string> => {
-    const reference = ref(STORAGE, `${folder}/${filename}`)
+export const getImageUrl = async (fullPath: string): Promise<string> => {
+    const reference = ref(STORAGE, fullPath)
     return await getDownloadURL(reference)
 }
 
