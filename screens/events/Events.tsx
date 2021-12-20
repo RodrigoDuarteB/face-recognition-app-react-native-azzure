@@ -37,6 +37,7 @@ const Events = ({ navigation }: any) => {
     const [filter, setFilter] = useState<Filter>(filters[0])
 
     useEffect(() => {
+        console.log('ingreso')
         const fetchData = async () => {
             setUserEvents(await getUserEvents(user!.uid)) 
             setIsPhotographer(await userIsPhotographer(user!.uid))

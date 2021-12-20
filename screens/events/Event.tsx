@@ -17,8 +17,9 @@ import ImageModal from '../../components/ImageModal'
 const Event = ({ route, navigation }: any): JSX.Element => {
     usePreventScreenCapture()
     const [user] = useAuthState(getAuth())
-    const { title, photos, description, photographers }: ModelEvent = route.params
+    const { title, photos, description, photographers, createdBy }: ModelEvent = route.params
     
+    const isOwner = user!.uid == createdBy
     const isPhotographer = photographers.includes(user!.uid) 
 
     return (
@@ -52,6 +53,9 @@ const Event = ({ route, navigation }: any): JSX.Element => {
                                     key={index}
                                     uri={photo}
                                     style={styles.imageContainer}
+                                    preview={!isOwner && !isPhotographer}
+                                    deleteIcon={isOwner || isPhotographer}
+                                    onDelete={() => alert(index)}
                                 />
                             )
                         }

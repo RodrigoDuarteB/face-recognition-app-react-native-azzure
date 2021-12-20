@@ -92,9 +92,7 @@ const EditEvent = ({ route, navigation }: any) => {
                     style={{marginVertical: 10}}
                 >
                     <ConditionalRender condition={photos.length > 0}
-                        fallback={
-                            <AddPhotosButton onPress={() => setSelecting(true)}/>
-                        }
+                        fallback={<AddPhotosButton onPress={() => setSelecting(true)}/>}
                     >
                             {
                                 photos.map((photo, index) =>
@@ -102,6 +100,7 @@ const EditEvent = ({ route, navigation }: any) => {
                                         key={index}
                                         uri={photo}
                                         style={{height: 120, width: 120, margin: 7}}
+                                        deleteIcon
                                     />
                                 )
                             }
