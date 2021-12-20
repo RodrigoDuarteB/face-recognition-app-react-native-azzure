@@ -1,6 +1,7 @@
-import { arrayUnion, where } from "firebase/firestore";
+import { arrayRemove, arrayUnion, where } from "firebase/firestore";
 import { Event } from "../models/Event";
-import { getDataFromCollectionWithQueries, getImageUrl, saveDataToCollection, saveImage, updateDocument } from "./Service";
+import { Image } from "../models/Photo";
+import { getDataFromCollectionWithQueries, getImageUrl, removeImage, saveDataToCollection, saveImage, updateDocument } from "./Service";
 
 const dbRef = 'events'
 const storageRef = 'event-images'
@@ -23,7 +24,7 @@ export const getUserEvents = async (userId: string): Promise<Event[]> => {
             description: data.description,
             title: data.title,
             photographers: data.photographers,
-            photos: await getEventPhotos(data.photos)
+            photos: data.photos
         })
     }
     return events
@@ -45,7 +46,7 @@ export const getUserAppearEvents = async (userId: string): Promise<Event[]> => {
             description: data.description,
             title: data.title,
             photographers: data.photographers,
-            photos: await getEventPhotos(data.photos)
+            photos: data.photos
         })
     }
     return events
@@ -65,17 +66,20 @@ export const getUserContractedEvents = async (userId: string): Promise<Event[]> 
             description: data.description,
             title: data.title,
             photographers: data.photographers,
-            photos: await getEventPhotos(data.photos)
+            photos: data.photos
         })
     }
     return events
 }
 
 
-export const getEventPhotos = async (photoNames: string[]): Promise<string[]> => {
-    const images: string[] = []
+export const getEventPhotos = async (photoNames: string[]): Promise<Array<Image>> => {
+    const images: Array<Image> = []
     for (const name of photoNames) {
-        images.push(await getImageUrl(name))
+        images.push({
+            uri: await getImageUrl(name),
+            path: name
+        })
     }
     return images
 }
@@ -89,4 +93,12 @@ export const saveEventPhotos = async (eventId: string, paths: string[]): Promise
     await updateDocument(dbRef, eventId, {
         photos: arrayUnion(...photos)
     })
+}
+
+
+export const removeEventPhoto = async (eventId: string, path: string): Promise<void> => {
+    await updateDocument(dbRef, eventId, {
+        photos: arrayRemove(path)
+    })
+    await removeImage(path)
 }

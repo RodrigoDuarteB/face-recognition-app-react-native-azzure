@@ -36,23 +36,26 @@ const Events = ({ navigation }: any) => {
     const [direction, setDirection] = useState('asc')
     const [filter, setFilter] = useState<Filter>(filters[0])
 
+    const fetchData = async () => {
+        setUserEvents(await getUserEvents(user!.uid)) 
+        setIsPhotographer(await userIsPhotographer(user!.uid))
+        setAppearedEvents(await getUserAppearEvents(user!.uid))
+        setContractedEvents(await getUserContractedEvents(user!.uid))
+    }
+
     useEffect(() => {
-        console.log('ingreso')
-        const fetchData = async () => {
-            setUserEvents(await getUserEvents(user!.uid)) 
-            setIsPhotographer(await userIsPhotographer(user!.uid))
-            setAppearedEvents(await getUserAppearEvents(user!.uid))
-            setContractedEvents(await getUserContractedEvents(user!.uid))
-        }
-        setFetching(true)
-        fetchData()
-        .then(_ => {
-            setFetching(false)
-        })
-        .catch(e => {
-            setFetching(false)
-        })
-    }, [])
+        const unsuscribe = navigation.addListener('focus', () => {
+            setFetching(true)
+            fetchData()
+            .then(_ => {
+                setFetching(false)
+            })
+            .catch(e => {
+                setFetching(false)
+            })
+        })  
+        return unsuscribe
+    }, [navigation])
 
     const reFilter = () => {
         if(direction == 'asc'){

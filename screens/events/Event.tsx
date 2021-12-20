@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { ScrollView, StyleSheet, Text, ToastAndroid, View } from 'react-native'
 import { colors, container, title as globalTitle } from '../../global.styles'
 import Button from '../../components/Button'
 import Center from '../../components/Center'
@@ -13,17 +13,53 @@ import { Event as ModelEvent } from '../../models/Event'
 import ConditionalRender from '../../components/ConditionalRender'
 import Fallback from '../../components/Fallback'
 import ImageModal from '../../components/ImageModal'
+import { getEventPhotos, removeEventPhoto } from '../../services/EventService'
+import { Image } from '../../models/Photo'
+import Loading from '../../components/Loading'
+import ModalLoading from '../../components/ModalLoading'
 
 const Event = ({ route, navigation }: any): JSX.Element => {
     usePreventScreenCapture()
+    const { id, title, photos, description, photographers, createdBy }: ModelEvent = route.params
     const [user] = useAuthState(getAuth())
-    const { title, photos, description, photographers, createdBy }: ModelEvent = route.params
+    const [eventPhotos, setEventPhotos] = useState<Array<Image>>([])
+    const [paths, setPaths] = useState(photos)
+    const [fetching, setFetching] = useState(false)
+    const [deleting, setDeleting] = useState(false)
     
     const isOwner = user!.uid == createdBy
     const isPhotographer = photographers.includes(user!.uid) 
 
+    useEffect(() => {
+        setFetching(true)
+        getEventPhotos(paths)
+        .then(res => {
+            setEventPhotos(res)
+            setFetching(false)
+        })
+        .catch(e => {
+            setFetching(false)
+            ToastAndroid.show('No se pudo traer las imagenes', ToastAndroid.SHORT)
+        })
+    }, [paths])
+
+    const removePhoto = (photo: Image) => {
+        setDeleting(true)
+        removeEventPhoto(id!, photo.path)
+        .then(_ => {
+            setDeleting(false)
+            setPaths(paths.filter(path => path !== photo.path))
+            ToastAndroid.show('Se eliminó correctamente', ToastAndroid.SHORT)
+        })
+        .catch(e => {
+            setDeleting(false)
+            ToastAndroid.show('No se pudo eliminar la imagen', ToastAndroid.SHORT)
+        })
+    }
+
     return (
         <Content styles={container} cart={!isPhotographer} auth>
+            <ModalLoading visible={deleting}/>
             <Center>
                 <Text style={styles.title}>{title}</Text>
                 <Text style={styles.description}>{description}</Text>
@@ -42,24 +78,29 @@ const Event = ({ route, navigation }: any): JSX.Element => {
                 </View>
                 
                 <Text style={globalTitle}>Fotos del Evento</Text>
-                <ConditionalRender condition={photos.length > 0}
-                    fallback={<Fallback message='Aún no hay fotos en este evento'/>}
+                <ConditionalRender
+                    condition={!fetching}
+                    fallback={<Loading />}
                 >
-                    <ScrollView contentContainerStyle={styles.imagesContainer} 
-                    style={{marginVertical: 15}}>  
-                        {
-                            photos.map((photo, index) => 
-                                <ImageModal 
-                                    key={index}
-                                    uri={photo}
-                                    style={styles.imageContainer}
-                                    preview={!isOwner && !isPhotographer}
-                                    deleteIcon={isOwner || isPhotographer}
-                                    onDelete={() => alert(index)}
-                                />
-                            )
-                        }
-                    </ScrollView>
+                    <ConditionalRender condition={eventPhotos.length > 0}
+                        fallback={<Fallback message='Aún no hay fotos en este evento'/>}
+                    >
+                        <ScrollView contentContainerStyle={styles.imagesContainer} 
+                        style={{marginVertical: 15}}>  
+                            {
+                                eventPhotos.map((photo, index) => 
+                                    <ImageModal 
+                                        key={index}
+                                        uri={photo.uri}
+                                        style={styles.imageContainer}
+                                        preview={!isOwner && !isPhotographer}
+                                        deleteIcon={isOwner || isPhotographer}
+                                        onDelete={() => removePhoto(photo)}
+                                    />
+                                )
+                            }
+                        </ScrollView>
+                    </ConditionalRender>
                 </ConditionalRender>
 
                 { !isPhotographer && <Button 

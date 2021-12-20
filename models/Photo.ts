@@ -8,3 +8,8 @@ export interface Photo {
     event: Event
     photographer: Photographer
 }
+
+export interface Image {
+    uri: string
+    path: string
+}

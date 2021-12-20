@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Image, ImageStyle, TouchableOpacity, Modal, ImageBackground } from 'react-native'
+import { StyleSheet, Text, View, Image, ImageStyle, TouchableOpacity, Modal } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors, title } from '../global.styles';
 
@@ -7,7 +7,7 @@ interface Props {
     uri: string
     style?: ImageStyle,
     deleteIcon?: boolean
-    onDelete?: (...params: any[]) => any
+    onDelete?: (...params: any[]) => any 
     preview?: boolean
 }
 
@@ -29,7 +29,7 @@ const ImageModal = ({ uri, style, deleteIcon, onDelete, preview }: Props) => {
     }, [zooming, count])
 
     return (
-        <View>
+        <View style={styles.container}>
             <Modal
                 visible={zooming}
                 transparent={true}
@@ -50,25 +50,23 @@ const ImageModal = ({ uri, style, deleteIcon, onDelete, preview }: Props) => {
                 </View>
             </Modal>
 
-            <View style={styles.container}>
-                { deleteIcon && 
-                    <TouchableOpacity
-                        onPress={onDelete}
-                        style={{alignSelf: 'flex-end'}}
-                    >
-                        <MaterialIcons name='delete' size={30} color={'white'}/>
-                    </TouchableOpacity>
-                }
-
+            { deleteIcon && 
                 <TouchableOpacity
-                    onPress={() => setZooming(true)}
+                    onPress={onDelete}
+                    style={{alignSelf: 'flex-end'}}
                 >
-                    <Image
-                        source={{uri}}
-                        style={style ? style : {}}
-                    />
+                    <MaterialIcons name='delete' size={30} color={'white'}/>
                 </TouchableOpacity>
-            </View>
+            }
+
+            <TouchableOpacity
+                onPress={() => setZooming(true)}
+            >
+                <Image
+                    source={{uri}}
+                    style={style ? style : {}}
+                />
+            </TouchableOpacity>
         </View>
     )
 }

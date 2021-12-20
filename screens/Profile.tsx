@@ -1,7 +1,7 @@
 import { getAuth } from 'firebase/auth'
 import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { ScrollView, StyleSheet, Text } from 'react-native'
+import { ScrollView, StyleSheet, Text, ToastAndroid } from 'react-native'
 import Button from '../components/Button'
 import Center from '../components/Center'
 import ConditionalRender from '../components/ConditionalRender'
@@ -11,13 +11,15 @@ import Loading from '../components/Loading'
 import ModalLoading from '../components/ModalLoading'
 import StaticInputLabel from '../components/StaticInputLabel'
 import { container, title } from '../global.styles'
+import { Image } from '../models/Photo'
 import { User } from '../models/User'
 import { logout as logoutService } from '../services/AuthService'
-import { getUser } from '../services/UserService'
+import { getUser, removeUserImage } from '../services/UserService'
 
 const Profile = ({ navigation }: any) => {
     const [authUser] = useAuthState(getAuth())
     const [user, setUser] = useState<User | null>()
+    const [userPhotos, setUserPhotos] = useState<Array<Image>>([])
     const [loading, setLoading] = useState(false)
     const [fetching, setFetching] = useState(false)
 
@@ -33,9 +35,9 @@ const Profile = ({ navigation }: any) => {
         })
     }, [])
         
+
     const logout = async () => {
-        setLoading(true)
-      
+        setLoading(true)    
         logoutService()
         .then(_ => {
             setLoading(false)
@@ -46,8 +48,22 @@ const Profile = ({ navigation }: any) => {
         })
         .catch(e => {
             setLoading(false)
-            alert(e.message)
+            ToastAndroid.show('Ocurrió un error, intente mas tarde', ToastAndroid.SHORT)
         })      
+    }
+
+
+    const removeImage = (image: Image) => {
+        setLoading(true)
+        removeUserImage(user!.id!, image.path)
+        .then(_ => {
+            setLoading(false)
+            ToastAndroid.show('Se eliminó correctamente', ToastAndroid.SHORT)
+        })
+        .catch(e => {
+            setLoading(true)
+            ToastAndroid.show('No se pudo eliminar, intente mas tarde', ToastAndroid.SHORT)
+        })
     }
 
     return (
@@ -60,13 +76,16 @@ const Profile = ({ navigation }: any) => {
                     <StaticInputLabel value={user ? user.name : ''} label='Nombre' styles={{marginVertical: 5}}/>
                     <StaticInputLabel value={user ? user.email : ''} label='Email' styles={{marginVertical: 5}}/>
 
-                    <ScrollView horizontal>
+                    <Text style={title}>Fotos de Perfil</Text>
+                    <ScrollView horizontal style={{marginTop: 5}}>
                         {
-                            user && user.photos.map((photo, index) => 
+                            userPhotos.map((photo, index) => 
                                 <ImageModal 
                                     key={index}
-                                    uri={photo}
+                                    uri={photo.uri}
                                     style={styles.image}
+                                    deleteIcon
+                                    onDelete={() => removeImage(photo)}
                                 />
                             )
                         }

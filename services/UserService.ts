@@ -1,7 +1,8 @@
-import { where } from "firebase/firestore";
+import { arrayRemove, query, where } from "firebase/firestore";
+import { Image } from "../models/Photo";
 import { Photographer } from "../models/Photographer";
 import { User } from "../models/User";
-import { getAllDataFromCollection, getDataFromCollectionWithQueries, getImageUrl, saveDataToCollection } from "./Service";
+import { getAllDataFromCollection, getDataFromCollectionWithQueries, getImageUrl, removeImage, saveDataToCollection, updateDocument } from "./Service";
 
 const usersRef = 'users'
 
@@ -21,10 +22,13 @@ export const saveUserData = async (user: User): Promise<void> => {
     await saveDataToCollection(usersRef, data)
 }
 
-const getUserImages = async (photoNames: string[]): Promise<string[]> => {
-    const images: string[] = []
+const getUserImages = async (photoNames: string[]): Promise<Array<Image>> => {
+    const images: Array<Image> = []
     for(const name of photoNames){
-        images.push(await getImageUrl(name))
+        images.push({
+            uri: await getImageUrl(name),
+            path: name
+        })
     }
     return images
 }
@@ -38,7 +42,7 @@ export const getUser = async (userId: string): Promise<User | null> => {
             id: firstUser.id,
             email: firstUser.email,
             name: firstUser.name,
-            photos: await getUserImages(firstUser.photos)
+            photos: firstUser.photos
         }
         if(firstUser.photographer){
             data = {
@@ -85,4 +89,16 @@ export const getPhotographers = async (): Promise<Photographer[]> => {
         }
     })    
     return photographers
+}
+
+export const removeUserImage = async (userId: string, path: string) => {
+    const q = where('id', '==', userId)
+    const res = await getDataFromCollectionWithQueries(usersRef, q)
+    if(res.length > 0){
+        const id = res[0].id
+        await updateDocument(usersRef, id, {
+            photos: arrayRemove(path)
+        })
+        await removeImage(path)
+    }
 }
