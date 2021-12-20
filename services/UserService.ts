@@ -22,13 +22,10 @@ export const saveUserData = async (user: User): Promise<void> => {
     await saveDataToCollection(usersRef, data)
 }
 
-const getUserImages = async (photoNames: string[]): Promise<Array<Image>> => {
-    const images: Array<Image> = []
+const getUserImages = async (photoNames: string[]): Promise<Array<string>> => {
+    const images: Array<string> = []
     for(const name of photoNames){
-        images.push({
-            uri: await getImageUrl(name),
-            path: name
-        })
+        images.push(await getImageUrl(name))
     }
     return images
 }
@@ -42,7 +39,7 @@ export const getUser = async (userId: string): Promise<User | null> => {
             id: firstUser.id,
             email: firstUser.email,
             name: firstUser.name,
-            photos: firstUser.photos
+            photos: await getUserImages(firstUser.photos)
         }
         if(firstUser.photographer){
             data = {

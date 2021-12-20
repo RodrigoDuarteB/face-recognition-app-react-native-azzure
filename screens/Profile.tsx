@@ -11,7 +11,6 @@ import Loading from '../components/Loading'
 import ModalLoading from '../components/ModalLoading'
 import StaticInputLabel from '../components/StaticInputLabel'
 import { container, title } from '../global.styles'
-import { Image } from '../models/Photo'
 import { User } from '../models/User'
 import { logout as logoutService } from '../services/AuthService'
 import { getUser, removeUserImage } from '../services/UserService'
@@ -19,7 +18,6 @@ import { getUser, removeUserImage } from '../services/UserService'
 const Profile = ({ navigation }: any) => {
     const [authUser] = useAuthState(getAuth())
     const [user, setUser] = useState<User | null>()
-    const [userPhotos, setUserPhotos] = useState<Array<Image>>([])
     const [loading, setLoading] = useState(false)
     const [fetching, setFetching] = useState(false)
 
@@ -52,20 +50,6 @@ const Profile = ({ navigation }: any) => {
         })      
     }
 
-
-    const removeImage = (image: Image) => {
-        setLoading(true)
-        removeUserImage(user!.id!, image.path)
-        .then(_ => {
-            setLoading(false)
-            ToastAndroid.show('Se eliminó correctamente', ToastAndroid.SHORT)
-        })
-        .catch(e => {
-            setLoading(true)
-            ToastAndroid.show('No se pudo eliminar, intente mas tarde', ToastAndroid.SHORT)
-        })
-    }
-
     return (
         <ConditionalRender condition={!fetching} fallback={<Loading />}>
             <Content auth styles={container}>
@@ -79,13 +63,11 @@ const Profile = ({ navigation }: any) => {
                     <Text style={title}>Fotos de Perfil</Text>
                     <ScrollView horizontal style={{marginTop: 5}}>
                         {
-                            userPhotos.map((photo, index) => 
+                            user && user.photos.map((photo, index) => 
                                 <ImageModal 
                                     key={index}
-                                    uri={photo.uri}
+                                    uri={photo}
                                     style={styles.image}
-                                    deleteIcon
-                                    onDelete={() => removeImage(photo)}
                                 />
                             )
                         }
