@@ -1,11 +1,12 @@
 import { getAuth } from 'firebase/auth'
 import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { Image, ScrollView, StyleSheet, Text } from 'react-native'
+import { ScrollView, StyleSheet, Text } from 'react-native'
 import Button from '../components/Button'
 import Center from '../components/Center'
 import ConditionalRender from '../components/ConditionalRender'
 import Content from '../components/Content'
+import ImageModal from '../components/ImageModal'
 import Loading from '../components/Loading'
 import ModalLoading from '../components/ModalLoading'
 import StaticInputLabel from '../components/StaticInputLabel'
@@ -41,7 +42,7 @@ const Profile = ({ navigation }: any) => {
             navigation.reset({
                 index: 0,
                 routes: [{name: 'Login'}],
-            });
+            })
         })
         .catch(e => {
             setLoading(false)
@@ -62,9 +63,9 @@ const Profile = ({ navigation }: any) => {
                     <ScrollView horizontal>
                         {
                             user && user.photos.map((photo, index) => 
-                                <Image 
+                                <ImageModal 
                                     key={index}
-                                    source={{uri: photo}}
+                                    uri={photo}
                                     style={styles.image}
                                 />
                             )

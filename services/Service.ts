@@ -1,5 +1,5 @@
-import { getDocs, getFirestore, query, collection, addDoc, QueryDocumentSnapshot, DocumentData, QueryConstraint } from "firebase/firestore"
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
+import { getDocs, getFirestore, query, collection, addDoc, QueryDocumentSnapshot, DocumentData, QueryConstraint, doc, updateDoc } from "firebase/firestore"
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage"
 
 const FIRESTORE = getFirestore()
 const STORAGE = getStorage()
@@ -10,10 +10,12 @@ export const saveDataToCollection = async (collection: string, data: any): Promi
     await addDoc(getCollection(collection), data)
 }
 
+
 export const getAllDataFromCollection = async (collection: string): Promise<QueryDocumentSnapshot<DocumentData>[]> => {
     const res = await getDocs(getCollection(collection))
     return res.docs
 } 
+
 
 export const saveImage = async (uri: string, folder: string, subfolder?: string): Promise<string> => {
     const splitted = uri.split('/')
@@ -26,13 +28,27 @@ export const saveImage = async (uri: string, folder: string, subfolder?: string)
     return imageRef.fullPath
 }
 
+
 export const getImageUrl = async (fullPath: string): Promise<string> => {
     const reference = ref(STORAGE, fullPath)
     return await getDownloadURL(reference)
 }
 
+
 export const getDataFromCollectionWithQueries = async (collection: string, ...qr: QueryConstraint[]): Promise<QueryDocumentSnapshot<DocumentData>[]> => {
     const q = query(getCollection(collection), ...qr)
     const res = await getDocs(q) 
     return res.docs    
+} 
+
+
+export const updateDocument = async (collection: string, id: string, data: any) => {
+    const docRef = doc(FIRESTORE, collection, id)
+    await updateDoc(docRef, data)
+}
+
+
+export const removeImage = async (fullPath: string): Promise<void> => {
+    const imageRef = ref(STORAGE, fullPath)
+    await deleteObject(imageRef)
 }

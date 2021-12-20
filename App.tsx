@@ -5,12 +5,13 @@ import Login from './screens/Login';
 import Home from './screens/Home';
 import Profile from './screens/Profile';
 import Register from './screens/Register';
-import CreateEvent from './screens/CreateEvent';
-import Event from './screens/Event';
+import CreateEvent from './screens/events/CreateEvent';
+import Event from './screens/events/Event';
 import Cart from './screens/Cart';
 import { Provider } from 'react-redux'
 import store from './store';
 import Testing from './screens/Testing';
+import EditEvent from './screens/events/EditEvent';
 
 const Stack = createNativeStackNavigator()
 
@@ -24,6 +25,7 @@ const App = () => {
           <Stack.Screen name="Home" component={Home}/>
           <Stack.Screen name="Profile" component={Profile}/>
           <Stack.Screen name="CreateEvent" component={CreateEvent}/>
+          <Stack.Screen name="EditEvent" component={EditEvent}/>
           <Stack.Screen name="Event" component={Event}/>
           <Stack.Screen name="Cart" component={Cart}/>
           <Stack.Screen name="Testing" component={Testing}/>

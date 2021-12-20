@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
-import Center from '../components/Center'
-import Content from '../components/Content'
-import EventBadge from '../components/events/EventBadge'
-import { colors, container, title } from '../global.styles'
+import Center from '../../components/Center'
+import Content from '../../components/Content'
+import EventBadge from '../../components/events/EventBadge'
+import { colors, container, title } from '../../global.styles'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
-import RoundedButton from '../components/RoundedButton'
+import RoundedButton from '../../components/RoundedButton'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
-import { Event } from '../models/Event'
-import { getUserAppearEvents, getUserContractedEvents, getUserEvents } from '../services/EventService'
-import ConditionalRender from '../components/ConditionalRender'
-import Loading from '../components/Loading'
-import { userIsPhotographer } from '../services/UserService'
-import { Photographer } from '../models/Photographer'
-import Fallback from '../components/Fallback'
+import { Event } from '../../models/Event'
+import { getUserAppearEvents, getUserContractedEvents, getUserEvents } from '../../services/EventService'
+import ConditionalRender from '../../components/ConditionalRender'
+import Loading from '../../components/Loading'
+import { userIsPhotographer } from '../../services/UserService'
+import { Photographer } from '../../models/Photographer'
+import Fallback from '../../components/Fallback'
 
 interface Filter {
     name: string,
@@ -158,7 +158,7 @@ const Events = ({ navigation }: any) => {
                             fallback={<Fallback message='Aún no hay Eventos en los que aparezcas'/>}
                         >
                             {
-                                userEvents.map(event => 
+                                appearedEvents.map(event => 
                                     <EventBadge key={event.id} data={event} />
                                 )
                             }
@@ -171,8 +171,8 @@ const Events = ({ navigation }: any) => {
                                 fallback={<Fallback message='Aún no hay Eventos en los que estes contratado'/>}
                             >
                                 {
-                                    userEvents.map(event => 
-                                        <EventBadge key={event.id} data={event} />
+                                    contractedEvents.map(event => 
+                                        <EventBadge key={event.id} data={event} contract/>
                                     )
                                 }
                             </ConditionalRender>

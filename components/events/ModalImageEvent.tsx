@@ -5,7 +5,6 @@ import Button from '../Button'
 import Center from '../Center'
 import ModalContent from '../ModalContent'
 import { ModalProps } from '../ModalContent'
-import PopUpMessage from '../PopUpMessage'
 
 interface Props extends ModalProps {
     data?: any

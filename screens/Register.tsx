@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View, Switch, Image } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Switch, Alert } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import Center from '../components/Center'
 import ConditionalRender from '../components/ConditionalRender'
@@ -14,6 +14,7 @@ import Button from '../components/Button'
 import ModalMediaSelector from '../components/ModalMediaSelector'
 import { onAuthStateChanges, register } from '../services/AuthService'
 import Loading from '../components/Loading'
+import ImageModal from '../components/ImageModal'
 
 const Register = ({ navigation }: any) => {
     const [ready, setReady] = useState(false)
@@ -48,22 +49,26 @@ const Register = ({ navigation }: any) => {
     }
 
     const save = (data: any) => {
-        setSaving(true)
-        register({
-            name: data.name,
-            email: data.email,
-            password: data.password,
-            photos,
-            photographer: data.photographer ? {
-                contractCost: data.contractCost,
-                digitalCost: data.digitalCost,
-                printedCost: data.printedCost
-            } : undefined
-        })
-        .catch(e => {
-            setSaving(false)
-            alert(e)
-        })
+        if(photos.length >= 2){
+            setSaving(true)
+            register({
+                name: data.name,
+                email: data.email,
+                password: data.password,
+                photos,
+                photographer: data.photographer ? {
+                    contractCost: data.contractCost,
+                    digitalCost: data.digitalCost,
+                    printedCost: data.printedCost
+                } : undefined
+            })
+            .catch(e => {
+                setSaving(false)
+                Alert.alert('Errores', e)
+            })
+        }else{
+            Alert.alert('Fotos', 'Debes subir dos fotos de perfil donde se vea bien tu rostro')
+        }
     }
 
     return (
@@ -75,6 +80,8 @@ const Register = ({ navigation }: any) => {
                     visible={selectMedia}
                     onCancel={updatePhotos}
                     onAccept={updatePhotos}
+                    minSelection={2}
+                    maxSelection={5}
                 />
                 <ModalLoading visible={saving}/>
                 
@@ -131,9 +138,9 @@ const Register = ({ navigation }: any) => {
                             <ScrollView horizontal style={{marginVertical: 10}}>
                                 {
                                     photos.map((photo, index) => 
-                                        <Image 
+                                        <ImageModal
                                             key={index} 
-                                            source={{uri: photo}} 
+                                            uri={photo} 
                                             style={styles.imageContainer}
                                         />
                                     )

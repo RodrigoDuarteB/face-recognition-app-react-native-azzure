@@ -6,10 +6,11 @@ import { Event } from '../../models/Event'
 import Center from '../Center'
 
 interface Props {
-    data: Event
+    data: Event,
+    contract?: boolean
 }
 
-const EventBadge = ({ data }: Props) => {
+const EventBadge = ({ data, contract }: Props) => {
     const { title, date, photos } = data
 
     const navigation: any = useNavigation()
@@ -24,7 +25,7 @@ const EventBadge = ({ data }: Props) => {
                     <Text style={styles.text}>Fecha: {date.toLocaleDateString()}</Text>
                     <Text style={styles.text}>Fotos: {photos!.length}</Text>
                 </View>
-                <Text style={styles.text}>Fotos en las que apareces: {0}</Text>
+                { !contract && <Text style={styles.text}>Fotos en las que apareces: {0}</Text>}
             </Center>
         </TouchableOpacity>
     )

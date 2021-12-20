@@ -6,9 +6,10 @@ interface Props {
     value: string
     label: string
     styles?: ViewStyle
+    lines?: number
 }
 
-const StaticInputLabel = ({ value, label, styles }: Props) => {
+const StaticInputLabel = ({ value, label, styles, lines }: Props) => {
     return (
         <View style={{width: '100%', ...styles}}>
             <Text style={[labelStyle]}>{label}</Text>
@@ -16,6 +17,8 @@ const StaticInputLabel = ({ value, label, styles }: Props) => {
                     value={value}
                     style={input}
                     editable={false}
+                    multiline={lines ? true : false}
+                    numberOfLines={lines ? lines : 1}
                 />
         </View>
     )

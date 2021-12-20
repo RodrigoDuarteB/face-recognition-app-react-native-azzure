@@ -12,6 +12,5 @@ export interface Event {
     date: Date
     createdBy: string
     photographers: string[]
-    photos?: string[]
-    appearances?: Appearence[]
+    photos: string[]
 }

@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, Alert } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { container, input, label, title } from '../global.styles'
-import Button from '../components/Button'
-import Center from '../components/Center'
-import Content from '../components/Content'
-import InputLabel from '../components/InputLabel'
-import PhotographerBadge from '../components/events/PhotographerBadge'
+import { container, input, label, title } from '../../global.styles'
+import Button from '../../components/Button'
+import Center from '../../components/Center'
+import Content from '../../components/Content'
+import InputLabel from '../../components/InputLabel'
+import PhotographerBadge from '../../components/events/PhotographerBadge'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import ConditionalRender from '../components/ConditionalRender'
-import { saveEvent } from '../services/EventService'
-import { getPhotographers } from '../services/UserService'
-import { Photographer } from '../models/Photographer'
-import Loading from '../components/Loading'
+import ConditionalRender from '../../components/ConditionalRender'
+import { saveEvent } from '../../services/EventService'
+import { getPhotographers } from '../../services/UserService'
+import { Photographer } from '../../models/Photographer'
+import Loading from '../../components/Loading'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 import { connect } from 'react-redux'
-import Fallback from '../components/Fallback'
+import Fallback from '../../components/Fallback'
+import ModalLoading from '../../components/ModalLoading'
 
-const CreateEvent = ({ route, navigation, addItemToCart }: any) => {
+const CreateEvent = ({ navigation, addItemToCart }: any) => {
     const [user] = useAuthState(getAuth())
     const [fetching, setFetching] = useState(false)
     const [photographers, setPhotographers] = useState<Photographer[]>([])
@@ -27,8 +28,7 @@ const CreateEvent = ({ route, navigation, addItemToCart }: any) => {
     const [picking, setPicking] = useState(false)
     const [saving, setSaving] = useState(false)
     const [choosed, setChoosed] = useState<string[]>([])
-    const params: any = route.params
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const { control, handleSubmit, getValues } = useForm({
         defaultValues: {
             date,
             photographers: []
@@ -61,10 +61,7 @@ const CreateEvent = ({ route, navigation, addItemToCart }: any) => {
     }
 
     const save = (data: any) => {
-        if(params && params.edit){
-            //update
-        }else{
-            //register
+        if(choosed.length > 0){
             setSaving(true)
             saveEvent({
                 title: data.title,
@@ -82,13 +79,19 @@ const CreateEvent = ({ route, navigation, addItemToCart }: any) => {
                 setSaving(false)
                 alert(e)
             })
+        }else{
+            Alert.alert('Elegir fotógrafos', 'Debes contratar al menos a un fotógrafo para tu evento')
         }
+        
     }
 
     return (
         <ConditionalRender condition={!fetching} fallback={<Loading />}>
             <Content auth cart styles={container}>
-                <Text style={title}>{ params && params.edit ? 'Editar Evento' : 'Crear Evento'}</Text>
+                <ModalLoading 
+                    visible={saving}
+                />
+                <Text style={title}>Crear Evento</Text>
                 <Center>
                     <InputLabel 
                         name='title'
@@ -104,6 +107,7 @@ const CreateEvent = ({ route, navigation, addItemToCart }: any) => {
                         control={control}
                         styles={{marginBottom: 15}}
                         multiline
+                        required
                     />
 
                     <Text style={[label, {width: '100%'}]}>Fecha</Text>
@@ -147,7 +151,7 @@ const CreateEvent = ({ route, navigation, addItemToCart }: any) => {
                     </ScrollView>
 
                     <Button 
-                        title={ params && params.edit ? 'Editar Evento' : 'Crear Evento'}
+                        title='Crear Evento'
                         onPress={handleSubmit(save)}
                     />
                 </Center>

@@ -2,15 +2,15 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import React from 'react'
 import { StyleSheet, Text } from 'react-native'
 import { colors } from '../global.styles'
-import Events from './Events'
+import Events from './events/Events'
 import Photos from './Photos'
 import Purchases from './Purchases'
 import Header from '../components/Header'
 import { MaterialIcons } from '@expo/vector-icons'
 import Notifications from './Notifications'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import CreateEvent from './CreateEvent'
-import Event from './Event'
+import CreateEvent from './events/CreateEvent'
+import Event from './events/Event'
 
 const Tab = createBottomTabNavigator()
 const EventsStack = createNativeStackNavigator()

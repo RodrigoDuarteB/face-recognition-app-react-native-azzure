@@ -9,11 +9,13 @@ import { Control, useController } from 'react-hook-form'
 interface Props {
     control: Control<any, object>
     visible: boolean
+    minSelection?: number
+    maxSelection?: number
     onCancel: () => any
     onAccept: () => any
 }
 
-const ModalMediaSelector = ({ control, visible, onCancel, onAccept }: Props) => {
+const ModalMediaSelector = ({ control, visible, onCancel, onAccept, minSelection, maxSelection }: Props) => {
 
     const { field } = useController({
         name: 'photos',
@@ -31,10 +33,10 @@ const ModalMediaSelector = ({ control, visible, onCancel, onAccept }: Props) => 
     const widgetSettings = useMemo(
         () => ({
             getImageMetaData: false,
-            initialLoad: 100,
+            initialLoad: 150,
             assetsType: [MediaType.photo],
-            minSelection: 1,
-            maxSelection: 3,
+            minSelection: minSelection ? minSelection : 1,
+            maxSelection: maxSelection ? maxSelection : 1,
             portraitCols: 4,
             landscapeCols: 4,
         }),[]
@@ -98,6 +100,7 @@ const ModalMediaSelector = ({ control, visible, onCancel, onAccept }: Props) => 
         <Modal
             transparent={true}
             visible={visible}
+            animationType='slide'
         >
             <View style={styles.modalBackground}>
                 <AssetsSelector
@@ -120,6 +123,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         backgroundColor: '#00000040',
-        padding: 30
+        padding: 15
     },
 })
