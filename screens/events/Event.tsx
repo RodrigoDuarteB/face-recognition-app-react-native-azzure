@@ -17,8 +17,16 @@ import { getEventPhotos, removeEventPhoto } from '../../services/EventService'
 import { Image } from '../../models/Photo'
 import Loading from '../../components/Loading'
 import ModalLoading from '../../components/ModalLoading'
+import { connect } from 'react-redux'
+import { CartItem } from '../../models/Purchase'
 
-const Event = ({ route, navigation }: any): JSX.Element => {
+interface Props {
+    route?: any
+    navigation?: any
+    addItemsToCart: (items: Array<CartItem>) => any
+}
+
+const Event = ({ route, navigation, addItemsToCart }: Props): JSX.Element => {
     usePreventScreenCapture()
     const { id, title, photos, description, photographers, createdBy }: ModelEvent = route.params
     const [user] = useAuthState(getAuth())
@@ -105,7 +113,7 @@ const Event = ({ route, navigation }: any): JSX.Element => {
 
                 { !isPhotographer && <Button 
                     title="Comprar Todas"
-                    onPress={() => {}}
+                    onPress={() => addItemsToCart([])}
                     textColor="white"
                 />}
             </Center>
@@ -113,7 +121,16 @@ const Event = ({ route, navigation }: any): JSX.Element => {
     )
 }
 
-export default Event
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        addItemsToCart: (items: Array<CartItem>) => dispatch({
+            type: 'ADD_ALL',
+            payload: items
+        })
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Event)
 
 const styles = StyleSheet.create({
     title: {

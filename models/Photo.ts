@@ -1,10 +1,7 @@
 import { Event } from "./Event";
 import { Photographer } from "./Photographer";
 
-export interface Photo {
-    uri: string
-    digitalCost: string
-    printedCost: string
+export interface Photo extends Image {
     event: Event
     photographer: Photographer
 }

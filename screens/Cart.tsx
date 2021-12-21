@@ -1,42 +1,54 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 import { connect } from 'react-redux'
 import Button from '../components/Button'
 import Center from '../components/Center'
 import ConditionalRender from '../components/ConditionalRender'
 import Content from '../components/Content'
+import Fallback from '../components/Fallback'
+import CartItemBadge from '../components/purchases/CartItemBadge'
+import { container, title } from '../global.styles'
+import { CartItem } from '../models/Purchase'
 
 interface Props {
-    cartItems: any[]
-    removeItemFromCart: (item: any) => any
+    cartItems: Array<CartItem>
+    removeItemFromCart: (item: CartItem) => any
     cleanCart: () => any
 }
 
 const Cart = ({ cartItems, cleanCart, removeItemFromCart }: Props) => {
     return (
-        <Content auth>
+        <Content auth styles={container}>
             <Center>
-                <ConditionalRender condition={cartItems.length > 0}>
-                    
+                <Text style={title}>Carrito</Text>
+                <ScrollView style={{width: '100%'}}>
+                    <ConditionalRender condition={cartItems.length > 0}
+                        fallback={<Fallback message='No hay items en el carrito'/>}
+                    >
                         {
-                            cartItems.map(e => 
-                                <TouchableOpacity style={{padding: 10}} onPress={() => removeItemFromCart(e)}>
-                                    <Text>{e.user.id}</Text>
-                                </TouchableOpacity>
+                            cartItems.map((item, index) => 
+                                <CartItemBadge 
+                                    key={index}
+                                    data={item}
+                                    onPress={() => removeItemFromCart(item)}
+                                />
                             )
                         }
-                    
-                </ConditionalRender>
+                        
+                    </ConditionalRender>
+                </ScrollView>
                 <Button 
                     title='Limpiar Carro'
                     onPress={() => cleanCart()}
+                    styles={{ marginVertical: 10 }}
                 />
             </Center>
         </Content>
     )
 }
 
-const mapStateToProps = (state: any[]) => {
+const mapStateToProps = (state: Array<CartItem>) => {
     return {
         cartItems: state
     }
@@ -44,7 +56,7 @@ const mapStateToProps = (state: any[]) => {
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        removeItemFromCart: (item: any) => dispatch({
+        removeItemFromCart: (item: CartItem) => dispatch({
             type: 'REMOVE',
             payload: item
         }),
