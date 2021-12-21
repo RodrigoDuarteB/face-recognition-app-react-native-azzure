@@ -1,27 +1,33 @@
-import { getAuth } from 'firebase/auth'
-import { where } from 'firebase/firestore'
-import React, { useEffect } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
+import React, { useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
-import { getAllDataFromCollection, getDataFromCollectionWithQueries, getImageUrl } from '../services/Service'
-import { getUser } from '../services/UserService'
+import Button from '../components/Button'
+import Center from '../components/Center'
+import Content from '../components/Content'
+import { test } from '../services/FaceRecognitionService'
 
 const Testing = () => {
-    const [user] = useAuthState(getAuth())
+    const [ready, setReady] = useState('')
 
     useEffect(() => {
-        getImageUrl('event-images', 'WIvojsiTYvg3cRXuN1QF/1.PNG')
+        test()
         .then(res => {
-            //alert(res.length)
-            alert(res)
+            console.log(res)
         })
-        .catch(e => alert(e))
+        .catch(e => {
+            console.log(e)
+        })
     }, [])
 
     return (
-        <View>
-            <Text></Text>
-        </View>
+        <Content>
+            <Center>
+                <Text>{ready}</Text>
+                <Button 
+                    title="DO"
+                    onPress={() => {}} 
+                />
+            </Center>
+        </Content>
     )
 }
 

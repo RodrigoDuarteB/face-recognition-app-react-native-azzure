@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Image, ImageStyle, TouchableOpacity, Modal } from 'react-native'
+import { StyleSheet, Text, View, Image, ImageStyle, TouchableOpacity, Modal, ImageBackground } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons';
 import { colors, title } from '../global.styles';
+import Rectangle from './Rectangle';
 
 interface Props {
     uri: string
@@ -9,9 +10,10 @@ interface Props {
     deleteIcon?: boolean
     onDelete?: (...params: any[]) => any 
     preview?: boolean
+    rectangle?: any
 }
 
-const ImageModal = ({ uri, style, deleteIcon, onDelete, preview }: Props) => {
+const ImageModal = ({ uri, style, deleteIcon, onDelete, preview, rectangle }: Props) => {
     const [zooming, setZooming] = useState(false)
     const [count, setCount] = useState(15)
 
@@ -42,11 +44,22 @@ const ImageModal = ({ uri, style, deleteIcon, onDelete, preview }: Props) => {
                             Previsualizando: {count}
                         </Text>
                     }
-                    <Image 
+                    <ImageBackground 
                         source={{uri}}
                         style={{height: '100%', width: '100%'}}
                         resizeMode='contain'
-                    />
+                    >
+                        {
+                            rectangle &&
+                            <Rectangle 
+                                height={1142}
+                                width={1155}
+                                left={68}
+                                top={251}
+                                borderColor={'red'}
+                            />
+                        }
+                    </ImageBackground>
                 </View>
             </Modal>
 
