@@ -16,7 +16,6 @@ import { Photographer } from '../../models/Photographer'
 import Loading from '../../components/Loading'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
-import { connect } from 'react-redux'
 import Fallback from '../../components/Fallback'
 import ModalLoading from '../../components/ModalLoading'
 
@@ -27,29 +26,23 @@ const CreateEvent = ({ navigation, addItemToCart }: any) => {
     const [date, setDate] = useState(new Date())
     const [picking, setPicking] = useState(false)
     const [saving, setSaving] = useState(false)
-    const [choosed, setChoosed] = useState<string[]>([])
-    const { control, handleSubmit, getValues } = useForm({
-        defaultValues: {
-            date,
-            photographers: []
-        }
-    })
+    const [choosed, setChoosed] = useState<Photographer[]>([])
+    const { control, handleSubmit, getValues } = useForm()
 
     useEffect(() => {
         setFetching(true)
         getPhotographers()
         .then(res => {
-            setPhotographers(res.filter(ph => ph.user?.id != user?.uid))
+            setPhotographers(res.filter(ph => ph.user?.id !== user?.uid))
             setFetching(false)
         })
     }, [])
 
 
-    const addPhotographers = (id: string) => {
-        if(choosed.includes(id)){
-            setChoosed(choosed.filter((e) => e != id))
-        }else{
-            choosed.push(id)
+    const addPhotographers = (ph: Photographer) => {
+        const alreadyExists = choosed.filter(pg => pg.user?.id == ph.user?.id).length > 0
+        if(!alreadyExists) {
+            choosed.push(ph)
         }
     }
 
@@ -68,8 +61,7 @@ const CreateEvent = ({ navigation, addItemToCart }: any) => {
                 description: data.description,
                 date,
                 createdBy: user!.uid,
-                photographers: choosed,
-                photos: []
+                photographers: choosed
             })
             .then(_ => {
                 setSaving(false)
@@ -140,9 +132,8 @@ const CreateEvent = ({ navigation, addItemToCart }: any) => {
                                     <PhotographerBadge 
                                         key={ph.user!.id} 
                                         data={ph}
-                                        onPress={(id) => {
-                                            addPhotographers(id)
-                                            addItemToCart(ph)
+                                        onPress={() => {
+                                            addPhotographers(ph)
                                         }}
                                     />
                                 )
@@ -160,16 +151,7 @@ const CreateEvent = ({ navigation, addItemToCart }: any) => {
     )
 }
 
-const mapDispatchToProps = (dispatch: any) => {
-    return {
-        addItemToCart: (item: any) => dispatch({
-            type: 'ADD',
-            payload: item
-        })
-    }
-}
-
-export default connect(null, mapDispatchToProps)(CreateEvent)
+export default CreateEvent
 
 const styles = StyleSheet.create({
     date: {

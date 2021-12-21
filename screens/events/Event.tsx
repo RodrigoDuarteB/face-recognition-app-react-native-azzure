@@ -14,41 +14,46 @@ import ConditionalRender from '../../components/ConditionalRender'
 import Fallback from '../../components/Fallback'
 import ImageModal from '../../components/ImageModal'
 import { getEventPhotos, removeEventPhoto } from '../../services/EventService'
-import { Image } from '../../models/Photo'
+import { Photo } from '../../models/Photo'
 import Loading from '../../components/Loading'
 import ModalLoading from '../../components/ModalLoading'
 
 const Event = ({ route, navigation }: any): JSX.Element => {
     usePreventScreenCapture()
-    const { id, title, photos, description, photographers, createdBy }: ModelEvent = route.params
+    const { id, title, description, photographers, createdBy }: ModelEvent = route.params
     const [user] = useAuthState(getAuth())
-    const [eventPhotos, setEventPhotos] = useState<Array<Image>>([])
-    const [paths, setPaths] = useState(photos)
+    const [eventPhotos, setEventPhotos] = useState<Array<Photo>>([])
     const [fetching, setFetching] = useState(false)
     const [deleting, setDeleting] = useState(false)
     
     const isOwner = user!.uid == createdBy
-    const isPhotographer = photographers.includes(user!.uid) 
+    const isPhotographer = photographers.filter(ph => ph.user?.id == user?.uid).length > 0
 
-    useEffect(() => {
-        setFetching(true)
-        getEventPhotos(paths)
-        .then(res => {
-            setEventPhotos(res)
-            setFetching(false)
-        })
-        .catch(e => {
-            setFetching(false)
-            ToastAndroid.show('No se pudo traer las imagenes', ToastAndroid.SHORT)
-        })
-    }, [paths])
+    const fetchData = async () => {
+        setEventPhotos(await getEventPhotos(id!))
+    }
 
-    const removePhoto = (photo: Image) => {
+    useEffect(() => {     
+        const unsuscribe = navigation.addListener('focus', () => { 
+            setFetching(true)
+            fetchData()
+            .then(res => {
+                setFetching(false)
+            })
+            .catch(e => {
+                setFetching(false)
+                ToastAndroid.show('No se pudo traer las imagenes', ToastAndroid.SHORT)
+            })
+        })
+        return unsuscribe
+    }, [deleting, navigation])
+
+
+    const removePhoto = (photo: Photo) => {
         setDeleting(true)
-        removeEventPhoto(id!, photo.path)
+        removeEventPhoto(photo)
         .then(_ => {
             setDeleting(false)
-            setPaths(paths.filter(path => path !== photo.path))
             ToastAndroid.show('Se eliminó correctamente', ToastAndroid.SHORT)
         })
         .catch(e => {
@@ -91,7 +96,7 @@ const Event = ({ route, navigation }: any): JSX.Element => {
                                 eventPhotos.map((photo, index) => 
                                     <ImageModal 
                                         key={index}
-                                        uri={photo.uri}
+                                        uri={photo.uri!}
                                         style={styles.imageContainer}
                                         preview={!isOwner && !isPhotographer}
                                         deleteIcon={isOwner || isPhotographer}

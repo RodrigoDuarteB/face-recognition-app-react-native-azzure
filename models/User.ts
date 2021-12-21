@@ -7,4 +7,5 @@ export interface User {
     name: string,
     photos: string[],
     photographer?: Photographer
+    personId?: string
 }

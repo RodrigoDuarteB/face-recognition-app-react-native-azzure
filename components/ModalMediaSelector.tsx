@@ -21,7 +21,7 @@ const ModalMediaSelector = ({ control, visible, onCancel, onAccept, minSelection
     
     useEffect(() => {
         requestMediaLibraryPermissionsAsync()
-        .then(res => console.log(res))
+        .then(res => {})
     }, [])
     
     const { field } = useController({
@@ -40,7 +40,7 @@ const ModalMediaSelector = ({ control, visible, onCancel, onAccept, minSelection
     const widgetSettings = useMemo(
         () => ({
             getImageMetaData: false,
-            initialLoad: 50,
+            initialLoad: 150,
             assetsType: [MediaType.photo],
             minSelection: minSelection ? minSelection : 1,
             maxSelection: maxSelection ? maxSelection : 2,

@@ -12,11 +12,10 @@ import InputLabel from '../components/InputLabel'
 import { MaterialIcons } from '@expo/vector-icons'
 import Button from '../components/Button'
 import ModalMediaSelector from '../components/ModalMediaSelector'
-import { onAuthStateChanges, register } from '../services/AuthService'
+import { register } from '../services/AuthService'
 import Loading from '../components/Loading'
 import ImageModal from '../components/ImageModal'
 import { usePermissions } from 'expo-media-library'
-import { requestMediaLibraryPermissionsAsync } from 'expo-image-picker'
 
 const Register = ({ navigation }: any) => {
     const [status, requestPermissions] = usePermissions()
@@ -33,14 +32,7 @@ const Register = ({ navigation }: any) => {
     })
 
     useEffect(() => {
-        setReady(true)
-        const unsuscribe = onAuthStateChanges(user => {
-            if(user){
-                navigation.replace('Home')
-            }
-        })
-        setReady(false)
-        return unsuscribe
+        
     }, [])
 
     const updatePhotos = () => {
@@ -60,10 +52,14 @@ const Register = ({ navigation }: any) => {
                 password: data.password,
                 photos,
                 photographer: data.photographer ? {
-                    contractCost: data.contractCost,
-                    digitalCost: data.digitalCost,
-                    printedCost: data.printedCost
+                    contractCost: parseInt(data.contractCost),
+                    digitalCost: parseInt(data.digitalCost),
+                    printedCost: parseInt(data.printedCost)
                 } : undefined
+            })
+            .then(res => {
+                setSaving(false)
+                navigation.replace('Home')
             })
             .catch(e => {
                 setSaving(false)
@@ -83,6 +79,7 @@ const Register = ({ navigation }: any) => {
                     visible={selectMedia}
                     onCancel={updatePhotos}
                     onAccept={updatePhotos}
+                    maxSelection={5}
                 />
                 <ModalLoading visible={saving}/>
                 

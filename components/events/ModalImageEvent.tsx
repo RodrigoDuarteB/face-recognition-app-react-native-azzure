@@ -12,7 +12,7 @@ interface Props extends ModalProps {
 
 const ModalImageEvent = ({ visible, onRequestClose, data }: Props) => {
     const [counter, setCounter] = useState(15)
-    const { title, date, photos, appears, description } = data
+    const { title, date, appears, description } = data
 
     useEffect(() => {
         visible && counter > 0 && setTimeout(() => {

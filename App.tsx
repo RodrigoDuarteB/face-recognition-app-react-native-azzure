@@ -15,6 +15,8 @@ import EditEvent from './screens/events/EditEvent';
 
 const Stack = createNativeStackNavigator()
 
+console.disableYellowBox = true
+
 const App = () => {
   return (
     <Provider store={store}>

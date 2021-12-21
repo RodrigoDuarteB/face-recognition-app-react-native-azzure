@@ -1,12 +1,12 @@
-import { Event } from "./Event";
 import { Photographer } from "./Photographer";
 
 export interface Photo {
-    uri: string
-    digitalCost: string
-    printedCost: string
-    event: Event
+    eventId: string
+    path: string
     photographer: Photographer
+    users: Array<string> 
+    docId?: string
+    uri?: string
 }
 
 export interface Image {

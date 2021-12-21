@@ -1,4 +1,6 @@
+import { getAuth } from 'firebase/auth'
 import React, { useState } from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import { useForm } from 'react-hook-form'
 import { Alert, ScrollView, StyleSheet, Text } from 'react-native'
 import AddPhotosButton from '../../components/AddPhotosButton'
@@ -16,6 +18,7 @@ import { saveEventPhotos } from '../../services/EventService'
 
 const EditEvent = ({ route, navigation }: any) => {
     const { id, title, date, description, createdBy, photographers }: Event = route.params
+    const [user] = useAuthState(getAuth())
     const [photos, setPhotos] = useState([])
     const [selecting, setSelecting] = useState(false)
     const [saving, setSaving] = useState(false)
@@ -25,17 +28,19 @@ const EditEvent = ({ route, navigation }: any) => {
         }
     }) 
 
+    const photographer = photographers.filter(ph => ph.user?.id === user?.uid)[0]
+
     const save = () => {
         if(photos.length > 0){
             setSaving(true)
-            saveEventPhotos(id!, photos)
+            saveEventPhotos(id!, photographer, photos)
             .then(_ => {
                 setSaving(false)
                 navigation.goBack()
             })
             .catch(e => {
-                Alert.alert('Errores', e)
                 setSaving(false)
+                console.log(e)
             })
         }else{
             Alert.alert('Errores', 'Debe subir al menos una foto al evento')
@@ -82,29 +87,30 @@ const EditEvent = ({ route, navigation }: any) => {
                 />
 
                 <Text style={globalTitle}>Subir Fotos</Text>
+
                 <ConditionalRender condition={photos.length > 0}>
                     <Button 
                         title='Añadir Más'
                         onPress={() => setSelecting(true)}
                     />
                 </ConditionalRender>
+
                 <ScrollView contentContainerStyle={styles.imagesContainer}
                     style={{marginVertical: 10}}
                 >
                     <ConditionalRender condition={photos.length > 0}
                         fallback={<AddPhotosButton onPress={() => setSelecting(true)}/>}
                     >
-                            {
-                                photos.map((photo, index) =>
-                                    <ImageModal 
-                                        key={index}
-                                        uri={photo}
-                                        style={{height: 120, width: 120, margin: 7}}
-                                        deleteIcon
-                                    />
-                                )
-                            }
-                        
+                        {
+                            photos.map((photo, index) =>
+                                <ImageModal 
+                                    key={index}
+                                    uri={photo}
+                                    style={{height: 120, width: 120, margin: 7}}
+                                />
+                            )
+                        }
+                            
                     </ConditionalRender>
                 </ScrollView>
                 <Button 

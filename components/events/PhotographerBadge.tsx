@@ -6,7 +6,7 @@ import Center from '../Center'
 
 interface Props {
     data: Photographer
-    onPress: (params: any) => any
+    onPress: () => any
 }
 
 const PhotographerBadge = ({ data, onPress }: Props) => {
@@ -14,7 +14,7 @@ const PhotographerBadge = ({ data, onPress }: Props) => {
 
     const pressed = () => {
         setSelected(!selected)
-        onPress(data.user?.id)
+        onPress()
     }
  
     return (

@@ -1,4 +1,4 @@
-import { getDocs, getFirestore, query, collection, addDoc, QueryDocumentSnapshot, DocumentData, QueryConstraint, doc, updateDoc } from "firebase/firestore"
+import { getDocs, getFirestore, query, collection, addDoc, QueryDocumentSnapshot, DocumentData, QueryConstraint, doc, updateDoc, DocumentReference, deleteDoc, getDoc } from "firebase/firestore"
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage"
 
 const FIRESTORE = getFirestore()
@@ -6,8 +6,9 @@ const STORAGE = getStorage()
 
 const getCollection = (col: string) => collection(FIRESTORE, col)
 
-export const saveDataToCollection = async (collection: string, data: any): Promise<void> => {
-    await addDoc(getCollection(collection), data)
+export const saveDataToCollection = async (collection: string, data: any): Promise<DocumentReference<any>> => {
+    const res = await addDoc(getCollection(collection), data)
+    return res
 }
 
 
@@ -51,4 +52,16 @@ export const updateDocument = async (collection: string, id: string, data: any) 
 export const removeImage = async (fullPath: string): Promise<void> => {
     const imageRef = ref(STORAGE, fullPath)
     await deleteObject(imageRef)
+}
+
+
+export const removeDocument = async (collection: string, id: string) => {
+    const docRef = doc(FIRESTORE, collection, id)
+    await deleteDoc(docRef)
+}
+
+
+export const getDocFromCollection = async (collection: string, id: string) => {
+    const docRef = doc(FIRESTORE, collection, id)
+    return await getDoc(docRef)
 }

@@ -11,7 +11,8 @@ export const saveUserData = async (user: User): Promise<void> => {
         id: user.id,
         email: user.email,
         name: user.name,
-        photos: user.photos
+        photos: user.photos,
+        personId: user.personId
     }
     if(user.photographer){
         data = {

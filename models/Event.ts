@@ -1,9 +1,4 @@
-import { User } from "./User";
-
-interface Appearence {
-    user: User,
-    appearences: number
-}
+import { Photographer } from "./Photographer";
 
 export interface Event {
     id?: string
@@ -11,6 +6,7 @@ export interface Event {
     description: string
     date: Date
     createdBy: string
-    photographers: string[]
-    photos: string[]
+    photographers: Array<Photographer>,
+    photosCount?: number
+    appearances?: number
 }

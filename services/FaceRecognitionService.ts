@@ -1,4 +1,5 @@
 import axios, { Method } from 'axios'
+import { FaceDetected, FaceIdentified } from '../models/Recognition'
 
 const ENDPOINT = 'https://event-photos-face-recognition.cognitiveservices.azure.com/face/v1.0'
 
@@ -22,7 +23,7 @@ const HttpRequest = async (method: Method, additionalPath?: string, data?: any):
 }
 
 
-export const detect = async (url: string) => {
+export const detect = async (url: string): Promise<Array<FaceDetected>> => {
     const res = await HttpRequest('POST', 'detect?returnFaceId=true&returnFaceLandmarks=false&recognitionModel=recognition_04&returnRecognitionModel=false&detectionModel=detection_03&faceIdTimeToLive=86400', {
         url
     })
@@ -30,36 +31,16 @@ export const detect = async (url: string) => {
 }
 
 
-export const addPersonGroup = async (personGroupId: string) => {
-    const res = await HttpRequest('PUT', `persongroups/${personGroupId}`, {
-        name: `group-${personGroupId}`,
-        recognitionModel: 'recognition_04'
-    })
-    return res
-}
-
-
-export const removePersonGroup = async (personGroupId: string) => {
-    return await HttpRequest('DELETE', `persongroups/${personGroupId}`)
-}
-
-
-export const getPersonGroups = async () => {
-    const res = await HttpRequest('GET', 'persongroups')
-    return res
-}
-
-
-export const addPersonToGroup = async (personGroupId: string, name: string, userData?: string) => {
+export const addPersonToGroup = async (personGroupId: string, name: string, userData?: string): Promise<string> => {
     const res = await HttpRequest('POST', `persongroups/${personGroupId}/persons`, {
         name,
         userData
     })
-    return res
+    return res.personId
 }
 
 
-export const addPersonFace = async (personGroupId: string, personId: string, url: string) => {
+export const addPersonFace = async (personGroupId: string, personId: string, url: string): Promise<string> => {
     const res = await HttpRequest('POST', `persongroups/${personGroupId}/persons/${personId}/persistedFaces?detectionModel=detection_03`, {
         url
     })
@@ -73,8 +54,9 @@ export const trainGroup = async (personGroupId: string) => {
 }
 
 
-export const identify = async (personGroupId: string, faceIds: Array<string>) => {
+export const identify = async (personGroupId: string, faceIds: Array<string>): Promise<Array<FaceIdentified>> => {
     const res = await HttpRequest('POST', 'identify', {
+        personGroupId,
         faceIds,
         maxNumOfCandidatesReturned: 1,
         confidenceThreshold: 0.5
