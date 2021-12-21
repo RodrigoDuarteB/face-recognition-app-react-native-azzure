@@ -12,10 +12,11 @@ import { Provider } from 'react-redux'
 import store from './store';
 import Testing from './screens/Testing';
 import EditEvent from './screens/events/EditEvent';
+import { LogBox } from 'react-native';
 
 const Stack = createNativeStackNavigator()
 
-console.disableYellowBox = true
+LogBox.ignoreAllLogs(true)
 
 const App = () => {
   return (
