@@ -22,7 +22,7 @@ export const saveUserData = async (user: User): Promise<void> => {
     await saveDataToCollection(usersRef, data)
 }
 
-const getUserImages = async (photoNames: string[]): Promise<Array<string>> => {
+export const getUserImages = async (photoNames: string[]): Promise<Array<string>> => {
     const images: Array<string> = []
     for(const name of photoNames){
         images.push(await getImageUrl(name))

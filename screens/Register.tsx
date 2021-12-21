@@ -15,8 +15,11 @@ import ModalMediaSelector from '../components/ModalMediaSelector'
 import { onAuthStateChanges, register } from '../services/AuthService'
 import Loading from '../components/Loading'
 import ImageModal from '../components/ImageModal'
+import { usePermissions } from 'expo-media-library'
+import { requestMediaLibraryPermissionsAsync } from 'expo-image-picker'
 
 const Register = ({ navigation }: any) => {
+    const [status, requestPermissions] = usePermissions()
     const [ready, setReady] = useState(false)
     const [selectMedia, setSelectMedia] = useState(false)
     const [photos, setPhotos] = useState([])
@@ -80,8 +83,6 @@ const Register = ({ navigation }: any) => {
                     visible={selectMedia}
                     onCancel={updatePhotos}
                     onAccept={updatePhotos}
-                    minSelection={2}
-                    maxSelection={5}
                 />
                 <ModalLoading visible={saving}/>
                 

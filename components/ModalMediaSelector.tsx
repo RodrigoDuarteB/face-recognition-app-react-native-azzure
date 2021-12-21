@@ -1,10 +1,11 @@
-import { MediaType } from 'expo-media-library'
-import React, { useMemo } from 'react'
+import { MediaType, usePermissions, requestPermissionsAsync } from 'expo-media-library'
+import React, { useEffect, useMemo } from 'react'
 import { Modal, StyleSheet, View } from 'react-native'
 import { colors } from '../global.styles'
 import { MaterialIcons } from '@expo/vector-icons'
 import { AssetsSelector } from 'expo-images-picker'
 import { Control, useController } from 'react-hook-form'
+import { requestMediaLibraryPermissionsAsync } from 'expo-image-picker'
 
 interface Props {
     control: Control<any, object>
@@ -16,7 +17,13 @@ interface Props {
 }
 
 const ModalMediaSelector = ({ control, visible, onCancel, onAccept, minSelection, maxSelection }: Props) => {
-
+    const [status, requestPermission] = usePermissions()  
+    
+    useEffect(() => {
+        requestMediaLibraryPermissionsAsync()
+        .then(res => console.log(res))
+    }, [])
+    
     const { field } = useController({
         name: 'photos',
         control,
@@ -33,10 +40,10 @@ const ModalMediaSelector = ({ control, visible, onCancel, onAccept, minSelection
     const widgetSettings = useMemo(
         () => ({
             getImageMetaData: false,
-            initialLoad: 150,
+            initialLoad: 50,
             assetsType: [MediaType.photo],
             minSelection: minSelection ? minSelection : 1,
-            maxSelection: maxSelection ? maxSelection : 1,
+            maxSelection: maxSelection ? maxSelection : 2,
             portraitCols: 4,
             landscapeCols: 4,
         }),[]
