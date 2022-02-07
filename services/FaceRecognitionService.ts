@@ -1,9 +1,10 @@
 import axios, { Method } from 'axios'
 import { FaceDetected, FaceIdentified } from '../models/Recognition'
+import Config from '../config'
 
-const ENDPOINT = 'https://event-photos-face-recognition.cognitiveservices.azure.com/face/v1.0'
+const ENDPOINT = Config.AZZURE.ENDPOINT
 
-const KEY = '746174e4cb29414eb6e05dcbf84a5ae5'
+const KEY = Config.AZZURE.KEY
 
 const headers = {
     'Content-Type': 'application/json',
