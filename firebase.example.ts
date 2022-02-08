@@ -10,7 +10,7 @@ firebase.initializeApp({
   projectId: "YOUR PROJECT ID",
   storageBucket: "YOUR STORAGE BUCKET",
   messagingSenderId: "YOUR MESSAGGING ID",
-  appId: "1YOUR APP ID"
+  appId: "YOUR APP ID"
 })
 
 export { auth } 
@@ -18,6 +18,6 @@ export { auth }
 export { store }
 
 const firestore = store.getFirestore()
-export  { firestore }
+export { firestore }
 
 export { storage }

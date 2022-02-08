@@ -6,6 +6,6 @@ STEPS TO SET AZZURE CONFIG
 3. If your config is valid and your azzure account is working, it should work normally
 
 STEPS TO SET FIREBASE
-1. Rename the file 'firebase.config.example.ts' to 'firebase.config.ts' at the root of the project
-2. Set or paste your Firebase app config within that file
+1. Rename the file 'firebase.example.ts' to 'firebase.ts' at the root of the project
+2. Set or paste your Firebase app config within the file
 3. If your permissions of Authentication, Firestore and Storage are enabled or unrestricted, firebase should work normally.

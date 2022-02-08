@@ -14,7 +14,7 @@ web-build/
 .DS_Store
 
 #firebase config
-firebase.config.ts
+firebase.ts
 
 #app config
 config.ts
