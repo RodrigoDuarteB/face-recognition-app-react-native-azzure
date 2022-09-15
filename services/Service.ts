@@ -1,8 +1,9 @@
 import { getDocs, getFirestore, query, collection, addDoc, QueryDocumentSnapshot, DocumentData, QueryConstraint, doc, updateDoc, DocumentReference, deleteDoc, getDoc } from "firebase/firestore"
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage"
+import { storage, store } from "../firebase"
 
-const FIRESTORE = getFirestore()
-const STORAGE = getStorage()
+const FIRESTORE = store
+const STORAGE = storage
 
 const getCollection = (col: string) => collection(FIRESTORE, col)
 

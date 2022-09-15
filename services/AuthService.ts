@@ -1,4 +1,5 @@
 import { getAuth, User, NextOrObserver, signInWithEmailAndPassword, onAuthStateChanged, createUserWithEmailAndPassword, updateProfile, signOut } from "firebase/auth";
+import { auth } from "../firebase";
 import { User as UserModel } from "../models/User";
 import { addPersonFace, addPersonToGroup, trainGroup } from "./FaceRecognitionService";
 import { saveImage } from "./Service";
@@ -7,7 +8,7 @@ import { getUserImages, saveUserData } from "./UserService";
 const usersStorageRef = 'user-images'
 const usersPersonGroupRef = 'event-users'
 
-const AUTH = getAuth()
+const AUTH = auth
 
 export const currentUser = AUTH.currentUser
 
