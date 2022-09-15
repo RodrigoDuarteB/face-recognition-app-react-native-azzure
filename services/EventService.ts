@@ -86,8 +86,10 @@ export const getEventPhotos = async (eventId: string, paths?: string[]): Promise
     const images: Array<Photo> = []
     const q = where('eventId', '==', eventId)
     const res = await getDataFromCollectionWithQueries(storageRef, q)
+    
     for (const photo of res) {
         const data = photo.data()
+        console.log(data)
         images.push({
             docId: photo.id,
             eventId,
@@ -97,6 +99,7 @@ export const getEventPhotos = async (eventId: string, paths?: string[]): Promise
             uri: await getImageUrl(data.path)
         })
     }
+    console.log(images)
     return images
 }
 

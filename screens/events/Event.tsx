@@ -49,6 +49,7 @@ const Event = ({ route, navigation, addItemsToCart }: Props): JSX.Element => {
                 setFetching(false)
             })
             .catch(e => {
+                console.log(e)
                 setFetching(false)
                 ToastAndroid.show('No se pudo traer las imagenes', ToastAndroid.SHORT)
             })

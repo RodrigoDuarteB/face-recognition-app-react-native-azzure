@@ -17,7 +17,9 @@ const Header = ({ navigation }: any) => {
             {/* user logo */}
             <Center>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('Profile')}
+                    onPress={() => {
+                        navigation.navigate('Profile')
+                    }}
                 >
                     <FontAwesome5 name="user-cog" size={30} color={colors.secondaryLight}/>
                 </TouchableOpacity>
