@@ -6,15 +6,12 @@ import EventBadge from '../../components/events/EventBadge'
 import { colors, container, title } from '../../global.styles'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
 import RoundedButton from '../../components/RoundedButton'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { getAuth } from 'firebase/auth'
 import { Event } from '../../models/Event'
 import { getUserAppearEvents, getUserContractedEvents, getUserEvents } from '../../services/EventService'
 import ConditionalRender from '../../components/ConditionalRender'
 import Loading from '../../components/Loading'
-import { userIsPhotographer } from '../../services/UserService'
-import { Photographer } from '../../models/Photographer'
 import Fallback from '../../components/Fallback'
+import { useAuth } from '../../context/Auth.context'
 
 interface Filter {
     name: string,
@@ -27,20 +24,20 @@ const Events = ({ navigation }: any) => {
         {name: 'Titulo', ref: 'title'}
     ]
 
-    const [user] = useAuthState(getAuth())
     const [fetching, setFetching] = useState(false)
     const [userEvents, setUserEvents] = useState<Event[]>([])
     const [appearedEvents, setAppearedEvents] = useState<Event[]>([])
     const [contractedEvents, setContractedEvents] = useState<Event[]>([])
-    const [isPhotographer, setIsPhotographer] = useState<Photographer | boolean>(false)
     const [direction, setDirection] = useState('asc')
     const [filter, setFilter] = useState<Filter>(filters[0])
+    const { user } = useAuth()
 
     const fetchData = async () => {
-        setUserEvents(await getUserEvents(user!.uid)) 
-        setIsPhotographer(await userIsPhotographer(user!.uid))
-        setAppearedEvents(await getUserAppearEvents(user!.uid))
-        setContractedEvents(await getUserContractedEvents(user!.uid))
+        setUserEvents(await getUserEvents(user!.id!)) 
+        setAppearedEvents(await getUserAppearEvents(user!.id!))
+        if(user?.photographer){
+            setContractedEvents(await getUserContractedEvents(user!.id!))
+        }
     }
 
     useEffect(() => {
@@ -99,9 +96,7 @@ const Events = ({ navigation }: any) => {
         }
         reFilter()
     }
-
     
-
     return (
         <ConditionalRender condition={!fetching} fallback={<Loading />}>
             <Content styles={container} cart auth>
@@ -169,7 +164,7 @@ const Events = ({ navigation }: any) => {
                         </ConditionalRender>
 
                         {/* contracted events (only photographers) */}
-                        <ConditionalRender condition={isPhotographer != false}>
+                        <ConditionalRender condition={user?.photographer != undefined}>
                             <Text style={title}>Eventos contratados como Fotógrafo</Text>
                             <ConditionalRender condition={contractedEvents.length > 0}
                                 fallback={<Fallback message='Aún no hay Eventos en los que estes contratado'/>}

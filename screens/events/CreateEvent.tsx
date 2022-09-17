@@ -14,13 +14,11 @@ import { saveEvent } from '../../services/EventService'
 import { getPhotographers } from '../../services/UserService'
 import { Photographer } from '../../models/Photographer'
 import Loading from '../../components/Loading'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { getAuth } from 'firebase/auth'
 import Fallback from '../../components/Fallback'
 import ModalLoading from '../../components/ModalLoading'
+import { useAuth } from '../../context/Auth.context'
 
 const CreateEvent = ({ navigation, addItemToCart }: any) => {
-    const [user] = useAuthState(getAuth())
     const [fetching, setFetching] = useState(false)
     const [photographers, setPhotographers] = useState<Photographer[]>([])
     const [date, setDate] = useState(new Date())
@@ -28,7 +26,8 @@ const CreateEvent = ({ navigation, addItemToCart }: any) => {
     const [saving, setSaving] = useState(false)
     const [choosed, setChoosed] = useState<Photographer[]>([])
     const { control, handleSubmit, getValues } = useForm()
-
+    const { user } = useAuth()
+ 
     useEffect(() => {
         setFetching(true)
         getPhotographers()
@@ -60,7 +59,7 @@ const CreateEvent = ({ navigation, addItemToCart }: any) => {
                 title: data.title,
                 description: data.description,
                 date,
-                createdBy: user!.uid,
+                createdBy: user?.id!,
                 photographers: choosed
             })
             .then(_ => {

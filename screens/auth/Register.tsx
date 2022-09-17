@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View, Switch, Alert } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import Center from '../components/Center'
-import ConditionalRender from '../components/ConditionalRender'
-import Content from '../components/Content'
-import Logo from '../components/Logo'
-import ModalLoading from '../components/ModalLoading'
-import { colors, container } from '../global.styles'
+import Center from '../../components/Center'
+import ConditionalRender from '../../components/ConditionalRender'
+import Content from '../../components/Content'
+import Logo from '../../components/Logo'
+import ModalLoading from '../../components/ModalLoading'
+import { colors, container } from '../../global.styles'
 import { useForm, Controller } from 'react-hook-form'
-import InputLabel from '../components/InputLabel'
+import InputLabel from '../../components/InputLabel'
 import { MaterialIcons } from '@expo/vector-icons'
-import Button from '../components/Button'
-import ModalMediaSelector from '../components/ModalMediaSelector'
-import { register } from '../services/AuthService'
-import Loading from '../components/Loading'
-import ImageModal from '../components/ImageModal'
+import Button from '../../components/Button'
+import ModalMediaSelector from '../../components/ModalMediaSelector'
+import { register } from '../../services/AuthService'
+import Loading from '../../components/Loading'
+import ImageModal from '../../components/ImageModal'
 import { usePermissions } from 'expo-media-library'
+import { useAuth } from '../../context/Auth.context'
 
 const Register = ({ navigation }: any) => {
     const [status, requestPermissions] = usePermissions()
@@ -30,6 +31,7 @@ const Register = ({ navigation }: any) => {
             photos: []
         }
     })
+    const { setUser } = useAuth()
 
     useEffect(() => {
         
@@ -58,13 +60,13 @@ const Register = ({ navigation }: any) => {
                 } : undefined
             })
             .then(res => {
-                setSaving(false)
+                setUser(res)
                 navigation.replace('Home')
             })
             .catch(e => {
-                setSaving(false)
                 Alert.alert('Errores', e)
             })
+            .finally(() => setSaving(false))
         }else{
             Alert.alert('Fotos', 'Debes subir dos fotos de perfil donde se vea bien tu rostro')
         }

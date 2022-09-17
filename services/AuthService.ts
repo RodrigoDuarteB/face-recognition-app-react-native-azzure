@@ -1,9 +1,9 @@
-import { getAuth, User, NextOrObserver, signInWithEmailAndPassword, onAuthStateChanged, createUserWithEmailAndPassword, updateProfile, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { User as UserModel } from "../models/User";
 import { addPersonFace, addPersonToGroup, trainGroup } from "./FaceRecognitionService";
 import { saveImage } from "./Service";
-import { getUserImages, saveUserData } from "./UserService";
+import { getUser, getUserImages, saveUserData } from "./UserService";
 
 const usersStorageRef = 'user-images'
 const usersPersonGroupRef = 'event-users'
@@ -12,10 +12,9 @@ const AUTH = auth
 
 export const currentUser = AUTH.currentUser
 
-export const onAuthStateChanges = (next: NextOrObserver<User>) => onAuthStateChanged(AUTH, next)
-
-export const login = async (email: string, password: string): Promise<void> => {
-    await signInWithEmailAndPassword(AUTH, email, password)  
+export const login = async (email: string, password: string): Promise<UserModel | null> => {
+    var { user } = await signInWithEmailAndPassword(AUTH, email, password)  
+    return await getUser(user.uid)
 }
 
 const saveImages = async (userId: string, uris: string[]): Promise<string[]> => {
@@ -26,7 +25,7 @@ const saveImages = async (userId: string, uris: string[]): Promise<string[]> => 
     return names
 }
 
-export const register = async (user: UserModel): Promise<void> => {
+export const register = async (user: UserModel): Promise<UserModel | null> => {
     try {
         const { user: { uid } } = await createUserWithEmailAndPassword(AUTH, user.email, user.password!) 
         user.id = uid
@@ -47,8 +46,9 @@ export const register = async (user: UserModel): Promise<void> => {
         }
         // train the group
         await trainGroup(usersPersonGroupRef)
+        return await getUser(uid)
     } catch (error) {
-        
+        return null
     }
     
 }

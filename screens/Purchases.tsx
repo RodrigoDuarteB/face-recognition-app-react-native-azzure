@@ -1,27 +1,25 @@
-import { getAuth } from 'firebase/auth'
 import React, { useEffect, useState } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { StyleSheet, Text, View } from 'react-native'
 import ConditionalRender from '../components/ConditionalRender'
 import Content from '../components/Content'
 import Fallback from '../components/Fallback'
 import Loading from '../components/Loading'
+import { useAuth } from '../context/Auth.context'
 import { Purchase } from '../models/Purchase'
 import { getUserPurchases } from '../services/PurchaseService'
 
 const Purchases = () => {
-    const [user] = useAuthState(getAuth())
     const [fetching, setFetching] = useState(false)
     const [purchases, setPurchases] = useState<Array<Purchase>>([])
+    const { user } = useAuth()
 
     useEffect(() => {
         setFetching(true)
-        getUserPurchases(user!.uid)
+        getUserPurchases(user?.id!)
         .then(res => {
             setPurchases(res)
-            setFetching(false)
         })
-        .catch(e => setFetching(false))
+        .finally(() => setFetching(false))
         
     }, [])
 

@@ -1,11 +1,9 @@
+import React from 'react'
 import { useNavigation } from '@react-navigation/core'
-import React, { useEffect } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { SafeAreaView, StyleSheet, View, ViewStyle } from 'react-native'
-import { getAuth } from 'firebase/auth'
 import { colors, safeTop } from '../global.styles'
-import Loading from './Loading'
 import CartButton from './CartButton'
+import { useAuth } from '../context/Auth.context'
 
 interface Props {
     safe?: boolean,
@@ -16,20 +14,15 @@ interface Props {
 }
 
 const Content = ({children, safe, auth, styles, cart }: Props) => {
-    const [user] = useAuthState(getAuth())
     const navigation: any = useNavigation()
+    const { user } = useAuth()
 
-    useEffect(() => {
-        if(auth && !user){
-            navigation.reset({
-                index: 0,
-                routes: [{name: 'Login'}]
-            })
-        }
-    }, [])
-
-    if(auth && !user)
-        return <Loading />
+    if(auth && !user){
+        navigation.reset({
+            index: 0,
+            routes: [{name: 'Login'}]
+        })
+    }
 
     return safe ? (
         <SafeAreaView style={[internStyles.container, safeTop, styles]}>

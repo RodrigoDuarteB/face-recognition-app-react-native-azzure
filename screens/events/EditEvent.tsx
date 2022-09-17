@@ -1,6 +1,4 @@
-import { getAuth } from 'firebase/auth'
 import React, { useState } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { useForm } from 'react-hook-form'
 import { Alert, ScrollView, StyleSheet, Text } from 'react-native'
 import AddPhotosButton from '../../components/AddPhotosButton'
@@ -12,23 +10,24 @@ import ImageModal from '../../components/ImageModal'
 import ModalLoading from '../../components/ModalLoading'
 import ModalMediaSelector from '../../components/ModalMediaSelector'
 import StaticInputLabel from '../../components/StaticInputLabel'
+import { useAuth } from '../../context/Auth.context'
 import { container, title as globalTitle } from '../../global.styles'
 import { Event } from '../../models/Event'
 import { saveEventPhotos } from '../../services/EventService'
 
 const EditEvent = ({ route, navigation }: any) => {
     const { id, title, date, description, createdBy, photographers }: Event = route.params
-    const [user] = useAuthState(getAuth())
     const [photos, setPhotos] = useState([])
     const [selecting, setSelecting] = useState(false)
     const [saving, setSaving] = useState(false)
+    const { user } = useAuth()
     const { control, getValues } = useForm({
         defaultValues: {
             photos: []
         }
     }) 
 
-    const photographer = photographers.filter(ph => ph.user?.id === user?.uid)[0]
+    const photographer = photographers.filter(ph => ph.user?.id === user?.id)[0]
 
     const save = () => {
         if(photos.length > 0){

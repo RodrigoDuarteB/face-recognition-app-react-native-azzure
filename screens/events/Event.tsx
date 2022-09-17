@@ -7,8 +7,6 @@ import Content from '../../components/Content'
 import { MaterialIcons } from '@expo/vector-icons'
 import RoundedButton from '../../components/RoundedButton'
 import { usePreventScreenCapture } from 'expo-screen-capture'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { getAuth } from 'firebase/auth'
 import { Event as ModelEvent } from '../../models/Event'
 import ConditionalRender from '../../components/ConditionalRender'
 import Fallback from '../../components/Fallback'
@@ -19,6 +17,7 @@ import Loading from '../../components/Loading'
 import ModalLoading from '../../components/ModalLoading'
 import { connect } from 'react-redux'
 import { CartItem } from '../../models/Purchase'
+import { useAuth } from '../../context/Auth.context'
 
 interface Props {
     route?: any
@@ -29,13 +28,13 @@ interface Props {
 const Event = ({ route, navigation, addItemsToCart }: Props): JSX.Element => {
     usePreventScreenCapture()
     const { id, title, description, photographers, createdBy }: ModelEvent = route.params
-    const [user] = useAuthState(getAuth())
     const [eventPhotos, setEventPhotos] = useState<Array<Photo>>([])
     const [fetching, setFetching] = useState(false)
     const [deleting, setDeleting] = useState(false)
-    
-    const isOwner = user!.uid == createdBy
-    const isPhotographer = photographers.filter(ph => ph.user?.id == user?.uid).length > 0
+    const { user } = useAuth()
+
+    const isOwner = user!.id == createdBy
+    const isPhotographer = photographers.filter(ph => ph.user?.id == user?.id).length > 0
 
     const fetchData = async () => {
         setEventPhotos(await getEventPhotos(id!))
@@ -45,13 +44,11 @@ const Event = ({ route, navigation, addItemsToCart }: Props): JSX.Element => {
         const unsuscribe = navigation.addListener('focus', () => { 
             setFetching(true)
             fetchData()
-            .then(res => {
-                setFetching(false)
-            })
             .catch(e => {
-                console.log(e)
-                setFetching(false)
                 ToastAndroid.show('No se pudo traer las imagenes', ToastAndroid.SHORT)
+            })
+            .finally(() => {
+                setFetching(false)
             })
         })
         return unsuscribe
@@ -62,12 +59,13 @@ const Event = ({ route, navigation, addItemsToCart }: Props): JSX.Element => {
         setDeleting(true)
         removeEventPhoto(photo)
         .then(_ => {
-            setDeleting(false)
             ToastAndroid.show('Se eliminó correctamente', ToastAndroid.SHORT)
         })
         .catch(e => {
-            setDeleting(false)
             ToastAndroid.show('No se pudo eliminar la imagen', ToastAndroid.SHORT)
+        })
+        .finally(() => {
+            setDeleting(false)
         })
     }
 
