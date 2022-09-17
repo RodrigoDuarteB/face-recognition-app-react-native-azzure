@@ -23,11 +23,14 @@ const AuthProvider: FC<IProps> = ({ children }) => {
     const [isReady, setIsReady] = useState(false)
     
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
             if(user){
-                setUser(await getUser(user.uid))
+                getUser(user.uid)
+                .then(user => setUser(user))
+                .finally(() => setIsReady(true))
+            }else{
+                setIsReady(true)
             }
-            setIsReady(true)
         })
         return unsubscribe
     }, [])

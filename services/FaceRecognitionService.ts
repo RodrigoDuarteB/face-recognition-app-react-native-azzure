@@ -1,16 +1,14 @@
 import axios, { Method } from 'axios'
 import { FaceDetected, FaceIdentified } from '../models/Recognition'
-import Config from '../config'
+import { AZZURE_KEY, AZZURE_URL } from '@env'
 
-const ENDPOINT = Config.AZZURE.ENDPOINT
-
-const KEY = Config.AZZURE.KEY
+const ENDPOINT = AZZURE_URL
+const KEY = AZZURE_KEY
 
 const headers = {
     'Content-Type': 'application/json',
     'Ocp-Apim-Subscription-Key': KEY
 }
-
 
 const HttpRequest = async (method: Method, additionalPath?: string, data?: any): Promise<any> => {
     const url = `${ENDPOINT}/${additionalPath}`

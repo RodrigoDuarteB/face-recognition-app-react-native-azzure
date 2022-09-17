@@ -13,8 +13,5 @@ web-build/
 # macOS
 .DS_Store
 
-#firebase config
-firebase.ts
-
-#app config
-config.ts
+#env variables
+*.env
